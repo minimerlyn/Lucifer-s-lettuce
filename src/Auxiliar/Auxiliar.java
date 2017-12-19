@@ -26,7 +26,7 @@ public class Auxiliar {
             if (op>0 && op<=n) {
                 validNumber=true;
             }else{
-                System.out.println("Opcion no valida.");
+                toRed("Opcion no valida.");
             }
         } while (!validNumber);
         return op;
@@ -54,7 +54,7 @@ public class Auxiliar {
         try{
             return Integer.parseInt(conv);
         }catch (NumberFormatException exc){
-            System.err.println("Introduce un numero sin letra");
+            toRed("Introduce un numero sin letra");
             return -1;
         }
     }
@@ -63,7 +63,7 @@ public class Auxiliar {
         try{
             return Float.parseFloat(conv);
         }catch (NumberFormatException exc){
-            System.err.println("Introduce un numero sin letra");
+            toRed("Introduce un numero sin letra");
             return -1;
         }
     }
@@ -74,7 +74,7 @@ public class Auxiliar {
             toret=Integer.parseInt(st);
             
         }catch(NumberFormatException exc){
-            System.err.println("Numero introducido no es valido.");
+            toRed("Numero introducido no es valido.");
             toret=-1;
         }
         return toret;
@@ -104,5 +104,8 @@ public class Auxiliar {
     
     public static void toGreen(String st){
         System.out.println("\\033[32m"+st+"\033[30m");
+    }
+    public static void toRed(String st){
+        System.out.println("\\033[31m"+st+"\033[30m");
     }
 }

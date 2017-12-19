@@ -62,7 +62,7 @@ public class Date {
     
     public String toStringDay(){
         StringBuilder toret = new StringBuilder();
-        toret.append("Dia.- ").append(day).append("/").append(month);
+        toret.append("Dia-> ").append(day).append("/").append(month);
         return toret.toString();
     }
     

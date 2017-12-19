@@ -64,7 +64,7 @@ public class Interaccion extends Object{
     @Override
     public String toString(){
         StringBuilder toret = new StringBuilder();
-        toret.append("");
+        toret.append("sin acabar");
         //toret.append("\n).append(graphycByTime());
         return toret.toString();
         

@@ -5,7 +5,7 @@
  */
 package lucifer.s.lettuce;
 
-import Joint.Interaccion;
+import Joint.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,7 +16,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import static Auxiliar.Auxiliar.*;
-import Joint.Date;
 import java.util.Calendar;
 
 /**
@@ -39,11 +38,11 @@ public class History {
             System.out.println("------------------------------------------");
             inter= new ArrayList<>(10);
         } catch (IOException ex) {
-            System.err.println("Error IOException.");
+            toRed("Error IOException.");
         } catch (ParserConfigurationException ex) {
-            System.err.println("Error ParserConfigurationException");
+            toRed("Error ParserConfigurationException");
         } catch (SAXException ex) {
-            System.err.println("Error ParserConfigurationException");
+            toRed("Error ParserConfigurationException");
         }
         
     }
@@ -51,14 +50,11 @@ public class History {
     public void addInteraction() {
         Interaccion nueva = newInteraccion();
         int i=0;
-        while () {
-            
-        }
         inter.add(0, nueva);
     }
     
     private Interaccion newInteraccion(){
-        float peso=leerNumFloat("Introduce peso de la maria en gramos: ");
+        float peso=leerNumFloat("Introduce peso de la lechuga en gramos: ");
         System.out.println("-------------------------");
         float pesoTotal=leerNumFloat("Introduce el peso total: ");
         System.out.println("-------------------------");
@@ -112,9 +108,9 @@ public class History {
                 case 2:
                     return cal.get(Calendar.DATE);
                 case 3:
-                    return cal.get(Calendar.MONTH);
+                    return cal.get(Calendar.MONTH)+1;
                 default:
-                    System.err.println("Valor de j no valido, avisar al administrador.");
+                    toRed("Valor de j no valido, avisar al administrador.");
                     return -1;
             }
             
@@ -148,7 +144,7 @@ public class History {
             int numberToret = parseInt(toret.toString());
                 if ( numberToret<0 || numberToret>=j) {// si esta fuera de rango
                     numberToret= -1;
-                    System.err.println("Hora no posible.");
+                    toRed("Hora no posible.");
                 }
             return numberToret;
         }
@@ -162,11 +158,12 @@ public class History {
         if (inter.size()>0) {
             System.out.println("Interaccion mas reciente arriba");
             for (int i = 0; i < inter.size(); i++) {
-                    if ( i>0 && inter.get(i).getDate().getDay() >= inter.get(i-1).getDate().getDay()+3 ) {
+                //ERROR AQUI, NO IMPRIME
+                    if ( i>0 && inter.get(i).getDate().getDay() >= (inter.get(i-1).getDate().getDay()+3) ) {//
                         System.out.println("------------------------------");
                         toGreen("Nueva compra.");
                     }
-                toret.append(i).append(".- ").append(inter.get(i).toStringResumen()).append("\n");
+                toret.append(i+1).append(".- ").append(inter.get(i).toStringResumen()).append("\n");
             }
             System.out.println(toret);
             boolean cont=true;
@@ -175,8 +172,8 @@ public class History {
                 op=leerNum("Introduce un numero para ver mas detalles o 0 para volver.- ");
                 if (op>inter.size() || op<=0) {
                     System.out.println("Numero no valido.");
-                }else if(op>inter.size() || op<0){
-                    System.out.println(inter.get(op).toString());
+                }else if(op<inter.size() || op>0){
+                    System.out.println(inter.get(op-1).toString());
                 }
             }while(op!=0);
         }else   System.out.println("No hay ninguna interaccion.");

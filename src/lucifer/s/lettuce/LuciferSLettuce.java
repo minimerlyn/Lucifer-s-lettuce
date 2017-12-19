@@ -6,6 +6,7 @@
 package lucifer.s.lettuce;
 
 import static Auxiliar.Auxiliar.*;
+import java.util.Calendar;
 
 /**
  *
@@ -18,7 +19,7 @@ public class LuciferSLettuce {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        mainlc();        
+        mainlc();     
     }
     
     public static void mainlc(){
@@ -29,7 +30,7 @@ public class LuciferSLettuce {
         while (cont) {
             System.out.println("------------------------------");
             System.out.println("Que desea hacer:");
-            System.out.println("1.- Ver Historial de interraciones."
+            System.out.println("1.- Ver Historial de interaciones."
                     + "\n2.- Ver grafica por tiempo."
                     + "\n3.- Nueva interracion."
                     + "\n4.- Esperar 10 min."
@@ -66,7 +67,7 @@ public class LuciferSLettuce {
                 Thread.sleep(1000*60*minLeft);
                 minLeft--;
             }catch (InterruptedException x){
-                System.err.println("Fallo al esperar el tiempo estimado.");
+               toRed("Fallo al esperar el tiempo estimado.");
             }
         }
     }
