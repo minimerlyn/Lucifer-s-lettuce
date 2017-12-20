@@ -101,6 +101,13 @@ public class Auxiliar {
         }
         return toret;
     }
+    
+    public static void clear(){
+        for (int i = 0; i < 10; i++) {
+            System.out.println("\n");
+        }
+    }
+    
     /*
         System.out.println("\033[30mEste texto es Negro"); por defecto
         System.out.println("\033[31mEste texto es Rojo"); toRed(String)

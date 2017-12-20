@@ -6,6 +6,7 @@
 package lucifer.s.lettuce;
 
 import static Auxiliar.Auxiliar.*;
+import static java.lang.Math.sqrt;
 import java.util.Calendar;
 
 /**
@@ -18,23 +19,15 @@ public class LuciferSLettuce {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
         mainlc();
-        /*
-        
-        float a = (float)0.2;
-        float b= (float)0.3;
-        float tot=a+b;
-        System.out.println(toGreen(Float.toString(tot)));
-        */
     }
     
     public static void mainlc(){
         History history = new History();
-        boolean cont=true;
-        int op;
+        int op=0;
         System.out.println("Bienvenido a Lucifer's lettuce");
-        while (cont) {
+        while (op!= MAX_OPTIONS) {
             System.out.println("------------------------------");
             System.out.println("Que desea hacer:");
             System.out.println("1.- Ver Historial de interaciones."
@@ -58,8 +51,9 @@ public class LuciferSLettuce {
                     break;
                 case 5:
                     System.out.println("Gracias por usar Lucifer's lettuce.\nHasta otra.");
-                    cont=false;
                     break;
+                default:
+                    System.out.println(toRed("Valor de j no valido, avisar al administrador."));
             }
             
         }
@@ -71,7 +65,7 @@ public class LuciferSLettuce {
         while (minLeft>0) {
             try{
                 System.out.println("Tiempo restante "+ minLeft+" min.");
-                Thread.sleep(1000*60*minLeft);
+                Thread.sleep(1000*60);
                 minLeft--;
             }catch (InterruptedException x){
                 System.out.println(toRed("Fallo al esperar el tiempo estimado."));

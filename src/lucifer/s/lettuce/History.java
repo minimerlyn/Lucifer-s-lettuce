@@ -17,6 +17,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import static Auxiliar.Auxiliar.*;
 import java.util.Calendar;
+import java.util.Random;
 
 /**
  *
@@ -25,8 +26,10 @@ import java.util.Calendar;
 public class History {
     private static final String FILE_NAME="History.xml";
     private ArrayList<Interaccion> inter ;
+    private int [] tiempoRespuesta = new int[4];//4 juegos distintos 
     
     public History() {
+        
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -37,6 +40,7 @@ public class History {
                     + "\nAsi que bienvenido en su primera vez");
             System.out.println("------------------------------------------");
             inter= new ArrayList<>(10);
+            calibracion();
         } catch (IOException ex) {
             System.out.println(toRed("Error IOException."));
         } catch (ParserConfigurationException ex) {
@@ -48,6 +52,7 @@ public class History {
     }
 
     public void addInteraction() {
+        clear();
         Interaccion nueva = newInteraccion();
         int i=0;
         while (i<inter.size() && !nueva.getDate().masReciente(inter.get(i).getDate())) {
@@ -161,10 +166,32 @@ public class History {
         }
     }
     
-   
+    private void calibracion(){
+        int i;
+        int j;
+        boolean correcto =true;
+        do{
+            i = (int) Math.floor(Math.random()*9);
+            j = (int) Math.floor(Math.random()*9);
+            System.out.println("uno");
+        }while(!correcto);
+    }
     
+    private void pause(int i){
+        do {
+            try{
+                Thread.sleep(1000);
+            }catch(InterruptedException exc){
+                System.out.println(toRed("Error en el metodo History.pause"));
+            }
+            i--;
+        } while (i>0);
+        
+        
+    }
     
     public void histoyOp() {
+        clear();
         if (inter.size()>0) {
             System.out.println(this.toString());
             boolean cont=true;
@@ -198,19 +225,25 @@ public class History {
     }
 
     public void graphycByTime() {
+        
         /*
-        |
-        |
-        |            |
-        |        |   |   
-        |    |   |   |   |   |
-        |____|___|___|___|___|___
+        
+        6|                  _
+        5|           _/----/|      _                    _             _
+        4|    _______|      |      |      _             |             |      
+        3|    |      |      |      |      |      _      |             |      
+        2|    |      |      |      |      |      |      |             |      _      _
+        1|____|______|______|______|______|______|______|_____________|______|______|
+            12:23  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33
+        
         */
         System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void contInteracion() {
-        //si el tiempo desde el ultimo porro introducido es menor qu 20 añade un nuevo dato a la ultima interraccin
+        //esperar confirmacion del usuario
+        //si el tiempo desde el ultimo porro introducido es menor qu 20 min añade un nuevo dato a la ultima interraccin
+        
         System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -234,7 +267,4 @@ public class History {
             toret.append("\nTotal fumado en esta compra: ").append(toGreen(Float.toString(cant)));
             return toret.toString();
     }
-    
-    
-    
 }

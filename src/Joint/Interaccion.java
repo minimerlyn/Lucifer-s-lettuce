@@ -55,6 +55,11 @@ public class Interaccion extends Object{
         this.date = date;
     }
     
+    public void addHtcInteracion(int i){
+        htc[0].add(i);
+    }
+    
+    
     public String toStringResumen(){
         StringBuilder toret = new StringBuilder();
         toret.append(getDay()).append("\t").
