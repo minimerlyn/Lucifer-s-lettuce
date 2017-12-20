@@ -165,24 +165,8 @@ public class History {
     
     
     public void histoyOp() {
-        StringBuilder toret = new StringBuilder();
         if (inter.size()>0) {
-            System.out.println(toBlue("Interaccion mas reciente arriba"));
-            float cant=0;
-            for (int i = 0; i < inter.size(); i++) {
-                toret.append("\n");
-                    if ( i>0 && esNuevaCompra(inter.get(i).getDate(),inter.get(i-1).getDate()) ) {
-                        toret.append("Total fumado en esta compra: ").append(toGreen(Float.toString(cant)));
-                        cant=0;
-                        toret.append("\n------------------------------\n");
-                        toret.append(toGreen("Nueva compra."));
-                        toret.append("\n");
-                    }
-                cant+=inter.get(i).getPeso();
-                toret.append(toBlue(Integer.toString(i+1))).append(toBlue(".- ")).append(inter.get(i).toStringResumen());
-            }
-            toret.append("\nTotal fumado en esta compra: ").append(toGreen(Float.toString(cant)));
-            System.out.println(toret);
+            System.out.println(this.toString());
             boolean cont=true;
             int op;
             do{
@@ -222,7 +206,7 @@ public class History {
         |    |   |   |   |   |
         |____|___|___|___|___|___
         */
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void contInteracion() {
@@ -230,7 +214,26 @@ public class History {
         System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
+    @Override
+    public String toString(){
+        StringBuilder toret = new StringBuilder();
+        System.out.println(toBlue("\nInteraccion mas reciente arriba"));
+            float cant=0;
+            for (int i = 0; i < inter.size(); i++) {
+                toret.append("\n");
+                    if ( i>0 && esNuevaCompra(inter.get(i).getDate(),inter.get(i-1).getDate()) ) {
+                        toret.append("\nTotal fumado en esta compra: ").append(toGreen(Float.toString(cant)));
+                        cant=0;
+                        toret.append("\n------------------------------\n");
+                        toret.append(toGreen("Nueva compra."));
+                        toret.append("\n");
+                    }
+                cant+=inter.get(i).getPeso();
+                toret.append(toBlue(Integer.toString(i+1))).append(toBlue(".- ")).append(inter.get(i).toStringResumen());
+            }
+            toret.append("\nTotal fumado en esta compra: ").append(toGreen(Float.toString(cant)));
+            return toret.toString();
+    }
     
     
     
