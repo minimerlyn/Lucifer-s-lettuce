@@ -5,6 +5,7 @@
  */
 package Auxiliar;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -13,6 +14,14 @@ import java.util.Scanner;
  */
 public class Auxiliar {
     
+    
+    private static void imprimirCad(String ... st){
+        StringBuilder cad = new StringBuilder();
+        for (String st1 : st) {
+            cad.append(st1);
+        }
+        System.out.print(cad.toString());
+    }
     /**
      * 
      * @param n numero maximo de opciones
@@ -26,7 +35,7 @@ public class Auxiliar {
             if (op>0 && op<=n) {
                 validNumber=true;
             }else{
-                toRed("Opcion no valida.");
+                System.out.println(toRed("Opcion no valida."));
             }
         } while (!validNumber);
         return op;
@@ -38,9 +47,9 @@ public class Auxiliar {
      * @param st cadena que se va a mostrar antes de solicitar valor
      * @return cadena introducida
      */
-    public static String leerCad(String st){
+    public static String leerCad(String ... st){
         Scanner scan = new Scanner(System.in);
-        System.out.print(st);
+        imprimirCad(st);
         return scan.nextLine().trim();
     }
 
@@ -49,21 +58,21 @@ public class Auxiliar {
      * @param st chain which is going to be sended to leerCad
      * @return chain parsed to integer.
      */
-    public  static int leerNum(String st) {
+    public  static int leerNum(String ... st) {
         String conv=leerCad(st);
         try{
             return Integer.parseInt(conv);
         }catch (NumberFormatException exc){
-            toRed("Introduce un numero sin letra");
+            System.out.println(toRed("Introduce un numero sin letra"));
             return -1;
         }
     }
-    public static float leerNumFloat(String st){
+    public static float leerNumFloat(String ... st){
         String conv=leerCad(st);
         try{
             return Float.parseFloat(conv);
         }catch (NumberFormatException exc){
-            toRed("Introduce un numero sin letra");
+            System.out.println(toRed("Introduce un numero sin letra"));
             return -1;
         }
     }
@@ -74,7 +83,7 @@ public class Auxiliar {
             toret=Integer.parseInt(st);
             
         }catch(NumberFormatException exc){
-            toRed("Numero introducido no es valido.");
+            System.out.println(toRed("Numero introducido no es valido."));
             toret=-1;
         }
         return toret;
@@ -92,20 +101,30 @@ public class Auxiliar {
         return toret;
     }
     /*
-        System.out.println("\033[30mEste texto es Negro");
-        System.out.println("\033[31mEste texto es Rojo");
-        System.out.println("\033[32mEste texto es Verde");
+        System.out.println("\033[30mEste texto es Negro"); por defecto
+        System.out.println("\033[31mEste texto es Rojo"); toRed(String)
+        System.out.println("\033[32mEste texto es Verde"); toGreen(String)
         System.out.println("\033[33mEste texto es Amarillo");
-        System.out.println("\033[34mEste texto es Azul");
+        System.out.println("\033[34mEste texto es Azul"); toBlue(String)
         System.out.println("\033[35mEste texto es Magenta");
         System.out.println("\033[36mEste texto es Cyan");
         System.out.println("\033[37mEste texto es Blanco")
     */
     
-    public static void toGreen(String st){
-        System.out.println("\\033[32m"+st+"\033[30m");
+    public static String toGreen(String st){
+         StringBuilder toret = new StringBuilder();
+        toret.append("\033[32m").append(st).append("\033[30m");
+        return toret.toString();
     }
-    public static void toRed(String st){
-        System.out.println("\\033[31m"+st+"\033[30m");
+    public static String toRed(String st){
+        StringBuilder toret = new StringBuilder();
+        toret.append("\033[31m").append(st).append("\033[30m");
+        return toret.toString();
+    }
+    
+    public static String toBlue(String st){
+        StringBuilder toret = new StringBuilder();
+        toret.append("\033[34m").append(st).append("\033[30m");
+        return toret.toString();
     }
 }

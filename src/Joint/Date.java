@@ -54,10 +54,19 @@ public class Date {
         this.min = min;
     }
     
+    /**
+     * 
+     * @param d fecha a comparar
+     * @return devuelve true si la fecha enviada es posterior a la fecha que llama al metodo
+     */
     public boolean masReciente(Date d){
-        if () {
-            
-        }
+        if (d.month == month) {
+            if (d.day==day) {
+                if (d.houre==houre) {
+                    return min>d.min;
+                }else return houre>d.houre;
+            }else return day>d.day;
+        }else return month>d.month;
     }
     
     public String toStringDay(){

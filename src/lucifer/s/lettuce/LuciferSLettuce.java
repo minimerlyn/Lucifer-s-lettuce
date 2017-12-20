@@ -67,7 +67,7 @@ public class LuciferSLettuce {
                 Thread.sleep(1000*60*minLeft);
                 minLeft--;
             }catch (InterruptedException x){
-               toRed("Fallo al esperar el tiempo estimado.");
+                System.out.println(toRed("Fallo al esperar el tiempo estimado."));
             }
         }
     }

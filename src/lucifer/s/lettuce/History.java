@@ -38,11 +38,11 @@ public class History {
             System.out.println("------------------------------------------");
             inter= new ArrayList<>(10);
         } catch (IOException ex) {
-            toRed("Error IOException.");
+            System.out.println(toRed("Error IOException."));
         } catch (ParserConfigurationException ex) {
-            toRed("Error ParserConfigurationException");
+            System.out.println(toRed("Error ParserConfigurationException"));
         } catch (SAXException ex) {
-            toRed("Error ParserConfigurationException");
+            System.out.println(toRed("Error ParserConfigurationException"));
         }
         
     }
@@ -50,17 +50,28 @@ public class History {
     public void addInteraction() {
         Interaccion nueva = newInteraccion();
         int i=0;
-        inter.add(0, nueva);
+        while (i<inter.size() && !nueva.getDate().masReciente(inter.get(i).getDate())) {
+            i++;
+        }
+        inter.add(i, nueva);
     }
     
     private Interaccion newInteraccion(){
-        float peso=leerNumFloat("Introduce peso de la lechuga en gramos: ");
-        System.out.println("-------------------------");
-        float pesoTotal=leerNumFloat("Introduce el peso total: ");
-        System.out.println("-------------------------");
+        float peso;
+        float pesoTotal;
+        do{
+            peso=leerNumFloat("Introduce el "+ toGreen("peso de la lechuga")+" en gramos: ");
+            System.out.println("-------------------------");
+            pesoTotal=leerNumFloat("Introduce el "+toGreen("peso total")+": ");
+            System.out.println("-------------------------");
+            if (pesoTotal/peso<1) {
+                System.out.println(toRed("el tamaño total no puede ser inferior al de la lechuga solo."
+                        + "\nVuelve a introducirlos."));
+            }
+        }while(pesoTotal/peso<1);
         int tipoFiltro=0;
         do{
-            System.out.println("Que tipo de filtro es?"
+            System.out.println("Que tipo de "+toGreen("filtro")+" es?"
                     + "\n1.-Carton."
                     + "\n2.-Filtro de carbono.");
             tipoFiltro= leerOP(2);
@@ -70,7 +81,7 @@ public class History {
         String momento;
         int hora,min;
         do {
-            momento = leerCad("A que hora te lo has fumado? \nIntroduce \":\" si es ahora. (Formato de 24h)(x:y)\n->");
+            momento = leerCad("A que "+toGreen("hora")+" te lo has fumado? \nIntroduce \":\" si es ahora. (Formato de 24h)(x:y)\n->");
             hora=getMomento(momento,0);
             min=getMomento(momento,1);
         } while (hora==-1 || min == -1);
@@ -82,7 +93,7 @@ public class History {
                 mes=getMomento(momento,3);
             }else{
                 System.out.println("-------------------------");
-                momento = leerCad("Que dia te lo has fumado? \nIntroduce \":\" si es hoy. (x/y)\n->");
+                momento = leerCad("Que "+toGreen("dia")+" te lo has fumado? \nIntroduce \":\" si es hoy. (x/y)\n->");
                 dia=getMomento(momento,2);
                 mes=getMomento(momento,3);
             }
@@ -110,7 +121,7 @@ public class History {
                 case 3:
                     return cal.get(Calendar.MONTH)+1;
                 default:
-                    toRed("Valor de j no valido, avisar al administrador.");
+                    System.out.println(toRed("Valor de j no valido, avisar al administrador."));
                     return -1;
             }
             
@@ -144,7 +155,7 @@ public class History {
             int numberToret = parseInt(toret.toString());
                 if ( numberToret<0 || numberToret>=j) {// si esta fuera de rango
                     numberToret= -1;
-                    toRed("Hora no posible.");
+                    System.out.println(toRed("Hora no posible."));
                 }
             return numberToret;
         }
@@ -153,17 +164,19 @@ public class History {
    
     
     
-    void histoyOp() {
+    public void histoyOp() {
         StringBuilder toret = new StringBuilder();
         if (inter.size()>0) {
             System.out.println("Interaccion mas reciente arriba");
             for (int i = 0; i < inter.size(); i++) {
-                //ERROR AQUI, NO IMPRIME
-                    if ( i>0 && inter.get(i).getDate().getDay() >= (inter.get(i-1).getDate().getDay()+3) ) {//
-                        System.out.println("------------------------------");
-                        toGreen("Nueva compra.");
+                toret.append("\n");
+                    if ( i>0 && esNuevaCompra(inter.get(i).getDate(),inter.get(i-1).getDate()) ) {//
+                        toret.append("\n------------------------------\n");
+                        toret.append(toGreen("Nueva compra."));
+                        toret.append("\n");
                     }
-                toret.append(i+1).append(".- ").append(inter.get(i).toStringResumen()).append("\n");
+                    
+                toret.append(toBlue(Integer.toString(i+1))).append(toBlue(".- ")).append(inter.get(i).toStringResumen());
             }
             System.out.println(toret);
             boolean cont=true;
@@ -182,8 +195,21 @@ public class History {
         
         //introduce un numero para ver mas detalles o 0 para volver
     }
+    
+    /**
+     * 
+     * @param d1 compra a mirar
+     * @param d2 compra anterior
+     * @return 
+     */
+    private boolean esNuevaCompra(Date d1, Date d2){
+        if (d1.getMonth()==d2.getMonth()) {
+            return (d2.getDay()-d1.getDay())>=3;
+        }
+        return true;
+    }
 
-    void graphycByTime() {
+    public void graphycByTime() {
         /*
         |
         |
@@ -195,7 +221,7 @@ public class History {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    void contInteracion() {
+    public void contInteracion() {
         //si el tiempo desde el ultimo porro introducido es menor qu 20 añade un nuevo dato a la ultima interraccin
         System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
