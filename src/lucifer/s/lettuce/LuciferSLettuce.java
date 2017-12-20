@@ -19,7 +19,14 @@ public class LuciferSLettuce {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        mainlc();     
+        mainlc();
+        /*
+        
+        float a = (float)0.2;
+        float b= (float)0.3;
+        float tot=a+b;
+        System.out.println(toGreen(Float.toString(tot)));
+        */
     }
     
     public static void mainlc(){

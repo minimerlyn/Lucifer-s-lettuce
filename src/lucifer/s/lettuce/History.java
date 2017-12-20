@@ -65,7 +65,7 @@ public class History {
             pesoTotal=leerNumFloat("Introduce el "+toGreen("peso total")+": ");
             System.out.println("-------------------------");
             if (pesoTotal/peso<1) {
-                System.out.println(toRed("el tamaño total no puede ser inferior al de la lechuga solo."
+                System.out.println(toRed("El tamaño total no puede ser inferior al de la lechuga solo."
                         + "\nVuelve a introducirlos."));
             }
         }while(pesoTotal/peso<1);
@@ -167,17 +167,21 @@ public class History {
     public void histoyOp() {
         StringBuilder toret = new StringBuilder();
         if (inter.size()>0) {
-            System.out.println("Interaccion mas reciente arriba");
+            System.out.println(toBlue("Interaccion mas reciente arriba"));
+            float cant=0;
             for (int i = 0; i < inter.size(); i++) {
                 toret.append("\n");
-                    if ( i>0 && esNuevaCompra(inter.get(i).getDate(),inter.get(i-1).getDate()) ) {//
+                    if ( i>0 && esNuevaCompra(inter.get(i).getDate(),inter.get(i-1).getDate()) ) {
+                        toret.append("Total fumado en esta compra: ").append(toGreen(Float.toString(cant)));
+                        cant=0;
                         toret.append("\n------------------------------\n");
                         toret.append(toGreen("Nueva compra."));
                         toret.append("\n");
                     }
-                    
+                cant+=inter.get(i).getPeso();
                 toret.append(toBlue(Integer.toString(i+1))).append(toBlue(".- ")).append(inter.get(i).toStringResumen());
             }
+            toret.append("\nTotal fumado en esta compra: ").append(toGreen(Float.toString(cant)));
             System.out.println(toret);
             boolean cont=true;
             int op;

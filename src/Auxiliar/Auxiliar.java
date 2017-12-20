@@ -22,6 +22,7 @@ public class Auxiliar {
         }
         System.out.print(cad.toString());
     }
+    
     /**
      * 
      * @param n numero maximo de opciones
