@@ -17,7 +17,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import static Auxiliar.Auxiliar.*;
 import java.util.Calendar;
-import java.util.Random;
 
 /**
  *
@@ -26,7 +25,8 @@ import java.util.Random;
 public class History {
     private static final String FILE_NAME="History.xml";
     private ArrayList<Interaccion> inter ;
-    private int [] tiempoRespuesta = new int[4];//4 juegos distintos 
+    //0- suma, 1- mult, 2 cadenas
+    private int [] tiempoRespuesta = new int[4];//4 juegos distintos en milisegundos
     
     public History() {
         
@@ -34,12 +34,14 @@ public class History {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = (Document) db.parse(new File(FILE_NAME));
+            //falta acabar
         } catch (FileNotFoundException exc){
             System.out.println("------------------------------------------");
             System.out.println("No se encutran archivos anteriores."
                     + "\nAsi que bienvenido en su primera vez");
             System.out.println("------------------------------------------");
             inter= new ArrayList<>(10);
+            System.out.println(toBlue("Pasemos a calibrar los tiempos de respuesta: "));
             calibracion();
         } catch (IOException ex) {
             System.out.println(toRed("Error IOException."));
@@ -167,14 +169,88 @@ public class History {
     }
     
     private void calibracion(){
-        int i;
-        int j;
-        boolean correcto =true;
+        Calendar cal;
+        int i,j,k,time;
+        boolean correcto;
+        System.out.println("Presiona enter cuando quieras empezar la prueba de "+toBlue("sumar")+":");
+        waitTillEnter();
         do{
-            i = (int) Math.floor(Math.random()*9);
-            j = (int) Math.floor(Math.random()*9);
-            System.out.println("uno");
+            k=0;
+            time=0;
+            cal=Calendar.getInstance();
+            correcto=true;
+            while (k<5 && correcto) {
+                i = (int) Math.floor(Math.random()*9);
+                j = (int) Math.floor(Math.random()*9);
+                correcto= resultCorrect(i,j,i+j);
+                time+=getDifTiempo(cal);
+                k++;
+                if (!correcto) {
+                    System.out.println("Es necesaro que respondas "+toRed("correctamente")+" a todas las  preguntas: ");
+                    System.out.println("Tiempo reiniciado");
+                }
+            }
         }while(!correcto);
+        System.out.println("tiempo total: "+time/1000+" seg. Tiempo medio: "+time/3/1000+"seg");
+        tiempoRespuesta[0]=time/5;
+        
+        System.out.println("Presiona enter cuando quieras empezar la prueba de "+toBlue("multiplicar")+":");
+        waitTillEnter();
+        do{
+            k=0;
+            time=0;
+            cal=Calendar.getInstance();
+            correcto=true;
+            while (k<3 && correcto) {
+                i = (int) Math.floor(Math.random()*9);
+                j = (int) Math.floor(Math.random()*9);
+                correcto= resultCorrect(i,j,i*j);
+                time+=getDifTiempo(cal);
+                k++;
+                if (!correcto) {
+                    System.out.println("Es necesaro que respondas "+toRed("correctamente")+" a todas las  preguntas: ");
+                    System.out.println("Tiempo reiniciado");
+                }
+            }
+        }while(!correcto);
+        System.out.println("tiempo total: "+time/1000+" seg. Tiempo medio: "+time/3/1000+"seg");
+        tiempoRespuesta[1]=time/5;
+        
+        System.out.println("Presiona enter cuando quieras empezar la prueba de "+toBlue("escritura")+":");
+        waitTillEnter();
+        do{
+            k=0;
+            time=0;
+            cal=Calendar.getInstance();
+            correcto=true;
+            while (k<2 && correcto) {
+                System.out.println("Escribe la siguiente cadena-");
+                i=(int) Math.floor(Math.random()*posiblesCadenas.length);
+                System.out.println(posiblesCadenas[i]);
+                correcto= posiblesCadenas[i].equals(leerCad("->"));
+                time+=getDifTiempo(cal);
+                k++;
+                if (!correcto) {
+                    System.out.println("Es necesaro que respondas "+toRed("correctamente")+" a todas las  preguntas: ");
+                    System.out.println("Tiempo reiniciado");
+                }
+            }
+        }while(!correcto);
+        System.out.println("tiempo total: "+time/1000+" seg. Tiempo medio: "+time/3/1000+"seg");
+        tiempoRespuesta[2]=time/5;
+    }
+    
+    private int getDifTiempo(Calendar c1){
+        Calendar c2=Calendar.getInstance();
+        int res=(c2.get(Calendar.HOUR_OF_DAY)-c1.get(Calendar.HOUR_OF_DAY))*120*1000;
+        res+=(c2.get(Calendar.MINUTE)-c1.get(Calendar.MINUTE))*60*1000;
+        res+=(c2.get(Calendar.SECOND)-c1.get(Calendar.SECOND))*1000;
+        res+=(c2.get(Calendar.MILLISECOND)-c1.get(Calendar.MILLISECOND));
+        return res;
+    }
+    
+    private boolean resultCorrect(int i, int j,int res){
+        return (leerNum(Integer.toString(i)+" * "+Integer.toString(j)+" = ")) == res;
     }
     
     private void pause(int i){

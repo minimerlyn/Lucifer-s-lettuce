@@ -5,6 +5,7 @@
  */
 package Auxiliar;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -13,7 +14,10 @@ import java.util.Scanner;
  * @author reyga
  */
 public class Auxiliar {
-    
+    public static String [] posiblesCadenas = {"Me comi una zapatilla sin aceitunas", "Mi perro es verde porque se enfado",
+                                               "Estoy tan drogado que no se leer bien", "Cada dia me como al menos un huevo",
+                                                "Me encanta jugar con el ordenador apagado", "Tonto el que lo lea al reves",
+                                                "No se por que hago esta mierda ahora", "Suelo beber pegamento por las mañanas"};
     
     private static void imprimirCad(String ... st){
         StringBuilder cad = new StringBuilder();
@@ -105,6 +109,14 @@ public class Auxiliar {
     public static void clear(){
         for (int i = 0; i < 10; i++) {
             System.out.println("\n");
+        }
+    }
+    
+    public static void waitTillEnter( ) {
+        try{
+            while( ( System.in.read() ) != '\n' );
+        }catch( IOException exc){
+            System.out.println(toRed("Error en waitTillEnter()"));
         }
     }
     

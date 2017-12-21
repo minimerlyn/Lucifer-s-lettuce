@@ -6,8 +6,6 @@
 package lucifer.s.lettuce;
 
 import static Auxiliar.Auxiliar.*;
-import static java.lang.Math.sqrt;
-import java.util.Calendar;
 
 /**
  *
@@ -19,9 +17,11 @@ public class LuciferSLettuce {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args){
-        mainlc();
+    public static void main(String[] args) {
+        //mainlc();
     }
+    
+    
     
     public static void mainlc(){
         History history = new History();
