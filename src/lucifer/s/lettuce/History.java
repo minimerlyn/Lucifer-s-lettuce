@@ -10,13 +10,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.text.Document;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 import static Auxiliar.Auxiliar.*;
+import java.io.FileOutputStream;
 import java.util.Calendar;
+import nu.xom.*;
 
 /**
  *
@@ -24,17 +21,43 @@ import java.util.Calendar;
  */
 public class History {
     private static final String FILE_NAME="History.xml";
+    private static final String RESPONSE_TIME="RESPONSE_TIME";  
+    private static final String INTERACTIONS="INTERACTIONS";
+    
+    
     private ArrayList<Interaccion> inter ;
     //0- suma, 1- mult, 2 cadenas
-    private int [] tiempoRespuesta = new int[4];//4 juegos distintos en milisegundos
+    private double [] tiempoRespuesta = new double[4];//4 juegos distintos en milisegundos
     
     public History() {
         
         try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = (Document) db.parse(new File(FILE_NAME));
-            //falta acabar
+            Builder parser = new Builder();
+            Document doc = parser.build(new File( FILE_NAME ));
+            Element data = doc.getRootElement();
+            Element eltoTR=data.getFirstChildElement(RESPONSE_TIME);
+            if (eltoTR == null) {
+                System.out.println(toRed("No se encuentran los tiempos de respuesta, pasando a calibracion: "));
+                calibracion();
+            }else{
+                eltoTR.getC
+                Elements tiempos=eltoTR.getChildElements("s");
+                for (int i = 1; i < tiempos.size(); i++) {
+                    tiempoRespuesta[i]=Integer.parseInt(tiempos.get(i).getValue());
+                }
+                System.out.println(toGreen("Tiempos de respuesta detectados y añadidos."));
+            }
+            Element eltoInter = data.getFirstChildElement(INTERACTIONS);
+            if (eltoInter == null) {
+                System.out.println(toRed("No se encuentran interracciones anteriores."));
+            }else{
+                Elements inters = eltoInter.getChildElements();
+                for (int i = 0; i < inters.size(); i++) {
+                    inter.add(new Interaccion(inters.get(i)));
+                }
+                System.out.println(toGreen("Interacciones detectadas y añadidas."));
+            }
+            
         } catch (FileNotFoundException exc){
             System.out.println("------------------------------------------");
             System.out.println("No se encutran archivos anteriores."
@@ -45,11 +68,9 @@ public class History {
             calibracion();
         } catch (IOException ex) {
             System.out.println(toRed("Error IOException."));
-        } catch (ParserConfigurationException ex) {
-            System.out.println(toRed("Error ParserConfigurationException"));
-        } catch (SAXException ex) {
-            System.out.println(toRed("Error ParserConfigurationException"));
-        }
+        } catch (ParsingException ex) {
+            System.out.println(toRed("Error ParsinsException"));
+        } 
         
     }
 
@@ -182,7 +203,7 @@ public class History {
             while (k<5 && correcto) {
                 i = (int) Math.floor(Math.random()*9);
                 j = (int) Math.floor(Math.random()*9);
-                correcto= resultCorrect(i,j,i+j);
+                correcto= leerNum(Integer.toString(i)+" + "+Integer.toString(j)+" = ") == i+j;
                 time+=getDifTiempo(cal);
                 k++;
                 if (!correcto) {
@@ -191,7 +212,7 @@ public class History {
                 }
             }
         }while(!correcto);
-        System.out.println("tiempo total: "+time/1000+" seg. Tiempo medio: "+time/3/1000+"seg");
+        System.out.println("tiempo total: "+time/1000+" seg. Tiempo medio: "+time/5/1000+" seg");
         tiempoRespuesta[0]=time/5;
         
         System.out.println("Presiona enter cuando quieras empezar la prueba de "+toBlue("multiplicar")+":");
@@ -201,10 +222,10 @@ public class History {
             time=0;
             cal=Calendar.getInstance();
             correcto=true;
-            while (k<3 && correcto) {
+            while (k<5 && correcto) {
                 i = (int) Math.floor(Math.random()*9);
                 j = (int) Math.floor(Math.random()*9);
-                correcto= resultCorrect(i,j,i*j);
+                correcto= leerNum(Integer.toString(i)+" * "+Integer.toString(j)+" = ") == i*j;
                 time+=getDifTiempo(cal);
                 k++;
                 if (!correcto) {
@@ -213,44 +234,55 @@ public class History {
                 }
             }
         }while(!correcto);
-        System.out.println("tiempo total: "+time/1000+" seg. Tiempo medio: "+time/3/1000+"seg");
+        System.out.println("tiempo total: "+time/1000+" seg. Tiempo medio: "+time/k/1000+" seg");
         tiempoRespuesta[1]=time/5;
         
         System.out.println("Presiona enter cuando quieras empezar la prueba de "+toBlue("escritura")+":");
         waitTillEnter();
         do{
+            cal=Calendar.getInstance();
             k=0;
             time=0;
-            cal=Calendar.getInstance();
             correcto=true;
-            while (k<2 && correcto) {
-                System.out.println("Escribe la siguiente cadena-");
+            j=0;
+            while (k<3 && correcto) {
+                System.out.println("Escribe la siguiente cadena:");
                 i=(int) Math.floor(Math.random()*posiblesCadenas.length);
-                System.out.println(posiblesCadenas[i]);
-                correcto= posiblesCadenas[i].equals(leerCad("->"));
+                System.out.println("->"+posiblesCadenas[i]);
+                correcto= posiblesCadenas[i].toLowerCase().equals(leerCad("->").toLowerCase());
                 time+=getDifTiempo(cal);
                 k++;
+                j+=posiblesCadenas[i].length();
                 if (!correcto) {
                     System.out.println("Es necesaro que respondas "+toRed("correctamente")+" a todas las  preguntas: ");
                     System.out.println("Tiempo reiniciado");
                 }
             }
         }while(!correcto);
-        System.out.println("tiempo total: "+time/1000+" seg. Tiempo medio: "+time/3/1000+"seg");
-        tiempoRespuesta[2]=time/5;
+        System.out.println("tiempo total: "+time/1000+" seg. Pulsaciones: "+j+" Tiempo medio: "+time/j/1000+"seg");
+        tiempoRespuesta[2]=time/j;
     }
+    
     
     private int getDifTiempo(Calendar c1){
-        Calendar c2=Calendar.getInstance();
-        int res=(c2.get(Calendar.HOUR_OF_DAY)-c1.get(Calendar.HOUR_OF_DAY))*120*1000;
-        res+=(c2.get(Calendar.MINUTE)-c1.get(Calendar.MINUTE))*60*1000;
-        res+=(c2.get(Calendar.SECOND)-c1.get(Calendar.SECOND))*1000;
-        res+=(c2.get(Calendar.MILLISECOND)-c1.get(Calendar.MILLISECOND));
+        Calendar c2= Calendar.getInstance();
+        int res;
+        if (c2.get(Calendar.HOUR_OF_DAY)<c1.get(Calendar.HOUR_OF_DAY)) {
+            res= (c2.get(Calendar.HOUR_OF_DAY)+24) - c1.get(Calendar.HOUR_OF_DAY);
+        } else res=(c2.get(Calendar.HOUR_OF_DAY)-c1.get(Calendar.HOUR_OF_DAY));
+        res*=3600000;
+        
+        if (c2.get(Calendar.MINUTE)<c1.get(Calendar.MINUTE)) {
+            res= (c2.get(Calendar.MINUTE)+60) - c1.get(Calendar.MINUTE);
+        } else res=(c2.get(Calendar.MINUTE)-c1.get(Calendar.MINUTE));
+        res*=60000;
+        
+        if (c2.get(Calendar.SECOND)<c1.get(Calendar.SECOND)) {
+            res= (c2.get(Calendar.SECOND)+60) - c1.get(Calendar.SECOND);
+        } else res=(c2.get(Calendar.SECOND)-c1.get(Calendar.SECOND));
+        res*=1000;
+        
         return res;
-    }
-    
-    private boolean resultCorrect(int i, int j,int res){
-        return (leerNum(Integer.toString(i)+" * "+Integer.toString(j)+" = ")) == res;
     }
     
     private void pause(int i){
@@ -321,6 +353,36 @@ public class History {
         //si el tiempo desde el ultimo porro introducido es menor qu 20 min añade un nuevo dato a la ultima interraccin
         
         System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public Element toDom(){
+        Element raiz = new Element("HISTORY");
+        Element eltoResponseTime= new Element(RESPONSE_TIME);
+        Element eltoInter = new Element(INTERACTIONS);
+        
+        
+        for (int i = 1; i < tiempoRespuesta.length; i++) {
+            eltoResponseTime.appendChild(Double.toString(tiempoRespuesta[i]));
+            eltoInter.appendChild(inter.get(i).toDom());
+        }
+        
+        raiz.appendChild(eltoResponseTime);
+        raiz.appendChild(eltoInter);
+        
+        return raiz;
+    }
+    
+    public void toXML() throws IOException
+    {
+        try{
+            FileOutputStream f = new FileOutputStream( FILE_NAME );
+            Serializer serial = new Serializer( f );
+            Document doc = new Document( this.toDom() );
+            serial.write(doc);
+            f.close();
+        }catch(IOException exc){
+            System.out.println(toRed("Error en toXML"));
+        }
     }
     
     @Override

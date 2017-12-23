@@ -6,6 +6,7 @@
 package lucifer.s.lettuce;
 
 import static Auxiliar.Auxiliar.*;
+import java.util.Calendar;
 
 /**
  *
@@ -18,9 +19,8 @@ public class LuciferSLettuce {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //mainlc();
+        mainlc();
     }
-    
     
     
     public static void mainlc(){
