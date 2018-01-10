@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lucifer.s.lettuce;
+package lucifers.lettuce;
 
 import Joint.*;
 import java.io.File;
@@ -27,7 +27,7 @@ public class History {
     
     private ArrayList<Interaccion> inter ;
     //0- suma, 1- mult, 2 cadenas
-    private double [] tiempoRespuesta = new double[4];//4 juegos distintos en milisegundos
+    private int [] tiempoRespuesta = new int[4];//4 juegos distintos en milisegundos
     
     public History() {
         
@@ -36,22 +36,24 @@ public class History {
             Document doc = parser.build(new File( FILE_NAME ));
             Element data = doc.getRootElement();
             Element eltoTR=data.getFirstChildElement(RESPONSE_TIME);
+            Element eltoInter = data.getFirstChildElement(INTERACTIONS);
+
             if (eltoTR == null) {
                 System.out.println(toRed("No se encuentran los tiempos de respuesta, pasando a calibracion: "));
                 calibracion();
             }else{
-                eltoTR.getC
-                Elements tiempos=eltoTR.getChildElements("s");
+                
+                Elements tiempos=eltoTR.getChildElements(RESPONSE_TIME);
                 for (int i = 1; i < tiempos.size(); i++) {
                     tiempoRespuesta[i]=Integer.parseInt(tiempos.get(i).getValue());
                 }
                 System.out.println(toGreen("Tiempos de respuesta detectados y añadidos."));
             }
-            Element eltoInter = data.getFirstChildElement(INTERACTIONS);
+            
             if (eltoInter == null) {
                 System.out.println(toRed("No se encuentran interracciones anteriores."));
             }else{
-                Elements inters = eltoInter.getChildElements();
+                Elements inters = eltoInter.getChildElements(INTERACTIONS);
                 for (int i = 0; i < inters.size(); i++) {
                     inter.add(new Interaccion(inters.get(i)));
                 }
@@ -77,7 +79,14 @@ public class History {
     public void addInteraction() {
         clear();
         Interaccion nueva = newInteraccion();
+        
         int i=0;
+        System.out.println("nueva inter "+inter.size());
+        if (inter.size()>i) {
+            System.out.println("si");
+        }else System.out.println("no");
+        nueva.getDate();
+        
         while (i<inter.size() && !nueva.getDate().masReciente(inter.get(i).getDate())) {
             i++;
         }
@@ -191,7 +200,8 @@ public class History {
     
     private void calibracion(){
         Calendar cal;
-        int i,j,k,time;
+        int i,j,k;
+        double time;
         boolean correcto;
         System.out.println("Presiona enter cuando quieras empezar la prueba de "+toBlue("sumar")+":");
         waitTillEnter();
@@ -204,7 +214,6 @@ public class History {
                 i = (int) Math.floor(Math.random()*9);
                 j = (int) Math.floor(Math.random()*9);
                 correcto= leerNum(Integer.toString(i)+" + "+Integer.toString(j)+" = ") == i+j;
-                time+=getDifTiempo(cal);
                 k++;
                 if (!correcto) {
                     System.out.println("Es necesaro que respondas "+toRed("correctamente")+" a todas las  preguntas: ");
@@ -212,8 +221,9 @@ public class History {
                 }
             }
         }while(!correcto);
+        time+=getDifTiempo(cal);
         System.out.println("tiempo total: "+time/1000+" seg. Tiempo medio: "+time/5/1000+" seg");
-        tiempoRespuesta[0]=time/5;
+        tiempoRespuesta[0]=(int)(time/5);// se guarda en milisegundos
         
         System.out.println("Presiona enter cuando quieras empezar la prueba de "+toBlue("multiplicar")+":");
         waitTillEnter();
@@ -226,7 +236,6 @@ public class History {
                 i = (int) Math.floor(Math.random()*9);
                 j = (int) Math.floor(Math.random()*9);
                 correcto= leerNum(Integer.toString(i)+" * "+Integer.toString(j)+" = ") == i*j;
-                time+=getDifTiempo(cal);
                 k++;
                 if (!correcto) {
                     System.out.println("Es necesaro que respondas "+toRed("correctamente")+" a todas las  preguntas: ");
@@ -234,8 +243,9 @@ public class History {
                 }
             }
         }while(!correcto);
+        time+=getDifTiempo(cal);
         System.out.println("tiempo total: "+time/1000+" seg. Tiempo medio: "+time/k/1000+" seg");
-        tiempoRespuesta[1]=time/5;
+        tiempoRespuesta[1]=(int)(time/5);// se guarda en milisegundos
         
         System.out.println("Presiona enter cuando quieras empezar la prueba de "+toBlue("escritura")+":");
         waitTillEnter();
@@ -259,12 +269,12 @@ public class History {
                 }
             }
         }while(!correcto);
-        System.out.println("tiempo total: "+time/1000+" seg. Pulsaciones: "+j+" Tiempo medio: "+time/j/1000+"seg");
+        System.out.println("tiempo total: "+time/1000+" seg. Pulsaciones: "+j+" Tiempo medio: "+(time/j)/1000+"seg");
         tiempoRespuesta[2]=time/j;
     }
     
     
-    private int getDifTiempo(Calendar c1){
+    private int getDifTiempo(Calendar c1){//HORRIBLE POR FAVOR EDITAR
         Calendar c2= Calendar.getInstance();
         int res;
         if (c2.get(Calendar.HOUR_OF_DAY)<c1.get(Calendar.HOUR_OF_DAY)) {
@@ -313,6 +323,7 @@ public class History {
                 }
             }while(op!=0);
         }else   System.out.println("No hay ninguna interaccion.");
+        this.toXML();
         //1-dia x has fumado tanta maria
         //2-dia y has fumado tanta maria
         
@@ -360,10 +371,15 @@ public class History {
         Element eltoResponseTime= new Element(RESPONSE_TIME);
         Element eltoInter = new Element(INTERACTIONS);
         
-        
+        Element eltoT;
         for (int i = 1; i < tiempoRespuesta.length; i++) {
-            eltoResponseTime.appendChild(Double.toString(tiempoRespuesta[i]));
-            eltoInter.appendChild(inter.get(i).toDom());
+            eltoT =new Element(INTERACTIONS);
+            eltoT.appendChild(Double.toString(tiempoRespuesta[i]));
+            eltoResponseTime.appendChild(eltoT);    
+        }
+        
+        for (Interaccion interc: inter) {
+            eltoInter.appendChild(interc.toDom());
         }
         
         raiz.appendChild(eltoResponseTime);
@@ -372,14 +388,12 @@ public class History {
         return raiz;
     }
     
-    public void toXML() throws IOException
-    {
+    public void toXML(){
         try{
             FileOutputStream f = new FileOutputStream( FILE_NAME );
             Serializer serial = new Serializer( f );
             Document doc = new Document( this.toDom() );
             serial.write(doc);
-            f.close();
         }catch(IOException exc){
             System.out.println(toRed("Error en toXML"));
         }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lucifer.s.lettuce;
+package lucifers.lettuce;
 
 import static Auxiliar.Auxiliar.*;
 import java.util.Calendar;
@@ -55,7 +55,7 @@ public class LuciferSLettuce {
                 default:
                     System.out.println(toRed("Valor de j no valido, avisar al administrador."));
             }
-            
+            history.toXML();
         }
         
     }
