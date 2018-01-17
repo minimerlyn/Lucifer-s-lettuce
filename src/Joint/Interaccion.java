@@ -67,8 +67,11 @@ public class Interaccion extends Object{
             System.out.println(toRed("htc esta vacio o hay un error"));
         }else{
             Elements htcs = elem.getChildElements(HTC);
-            for (int i = 0; i < htcs.size(); i++) 
-                htc.add(new HTC(htcs.get(i)));
+            if (htcs.size()==0) {
+                htc= new ArrayList<>();
+            }else
+                for (int i = 0; i < htcs.size(); i++) 
+                    htc.add(new HTC(htcs.get(i)));
             
         }
         

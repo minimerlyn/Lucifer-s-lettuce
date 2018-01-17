@@ -17,7 +17,7 @@ public class Auxiliar {
     public static String [] posiblesCadenas = {"Me comi una zapatilla con aceitunas", "Mi perro es verde porque se enfado",
                                                "Estoy tan drogado que no se leer bien", "Cada dia me como al menos un huevo",
                                                 "Me encanta jugar con el ordenador apagado", "Tonto el que lo lea al reves",
-                                                "No se por que hago esta mierda ahora", "Suelo beber pegamento cuando me despierto"};
+                                                "Me apetece caminar descalzo sobre lava", "Suelo beber pegamento cuando me despierto"};
     
     private static void imprimirCad(String ... st){
         StringBuilder cad = new StringBuilder();

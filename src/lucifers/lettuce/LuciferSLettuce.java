@@ -19,7 +19,7 @@ public class LuciferSLettuce {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        mainlc();
+       mainlc();
     }
     
     
