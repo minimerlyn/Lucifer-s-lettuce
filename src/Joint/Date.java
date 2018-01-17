@@ -92,7 +92,6 @@ public class Date {
         if (d.month == month) {
             if (d.day==day) {
                 if (d.houre==houre) {
-                    System.out.println("estoy en houre");
                     return min>d.min;
                 }else return houre>d.houre;
             }else return day>d.day;
