@@ -6,7 +6,8 @@
 package lucifers.lettuce;
 
 import static Auxiliar.Auxiliar.*;
-import java.util.Calendar;
+import Joint.HTC;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,12 +15,12 @@ import java.util.Calendar;
  */
 public class LuciferSLettuce {
     private static final int MAX_OPTIONS =5;
-
+    private static ArrayList<HTC> htc;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       mainlc();
+        mainlc();
     }
     
     
@@ -42,7 +43,7 @@ public class LuciferSLettuce {
                     history.histoyOp();
                     break;
                 case 2:
-                    history.graphycByTime();
+                    history.QuantityGraphycByTime();
                     break;
                 case 3: history.addInteraction();
                     break;

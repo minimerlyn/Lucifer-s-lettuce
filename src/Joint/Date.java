@@ -34,19 +34,24 @@ public class Date {
     public Date(Element elem){
         if (elem.getFirstChildElement(DAY) == null) {
             System.out.println(toRed("Hay un error con el dia."));
+            day=0;
         }else day = Integer.parseInt(elem.getFirstChildElement(DAY).getValue());
         
         if (elem.getFirstChildElement(MONTH) == null) {
             System.out.println(toRed("Hay un error con el mes."));
+            month=0;
         }else month = Integer.parseInt(elem.getFirstChildElement(MONTH).getValue());
         
         if (elem.getFirstChildElement(HOURE) == null) {
             System.out.println(toRed("Hay un error con la hora."));
+            houre=0;
         }else houre = Integer.parseInt(elem.getFirstChildElement(HOURE).getValue());
         
         if (elem.getFirstChildElement(MINUTE) == null) {
-            System.out.println(toRed("Hay un error con el dia."));
-        }else day = Integer.parseInt(elem.getFirstChildElement(MINUTE).getValue());
+            System.out.println(toRed("Hay un error con el minuto."));
+            min=0;
+        }else min = Integer.parseInt(elem.getFirstChildElement(MINUTE).getValue());
+        
     }
     
     

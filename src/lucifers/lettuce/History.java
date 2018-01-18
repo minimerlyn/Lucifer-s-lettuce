@@ -22,12 +22,13 @@ import nu.xom.*;
 public class History {
     private static final String FILE_NAME="History.xml";
     private static final String RESPONSE_TIME="RESPONSE_TIME";  
+    private static final String TIMES="TIME";  
     private static final String INTERACTIONS="INTERACTIONS";
+    private static final String INTERACTION="INTERACTION";
     
-    
-    private ArrayList<Interaccion> inter ;
+    private ArrayList<Interaccion> inter ;//en la posicion 0 la mas reciente
     //0- suma, 1- mult, 2 cadenas
-    private double [] tiempoRespuesta = new double[3];//3 juegos distintos en milisegundos 1- suma 2- mult 3- escritura
+    private double [] tiempoRespuesta = new double[3];//3 juegos distintos en milisegundos 
     
     public History() {
         
@@ -43,7 +44,7 @@ public class History {
                 calibracion();
             }else{
                 
-                Elements tiempos=eltoTR.getChildElements(INTERACTIONS);
+                Elements tiempos=eltoTR.getChildElements(TIMES);
                 if (tiempos.size()==0) {
                     tiempoRespuesta= new double[4];
                     System.out.println("No hay tiempos de respuesta anteriores. Pasando a calibracion:");
@@ -51,7 +52,6 @@ public class History {
                 }else{
                     for (int i = 0; i < tiempos.size(); i++) {
                         tiempoRespuesta[i]=Double.parseDouble(tiempos.get(i).getValue());
-                        System.out.println(i+" -> "+ tiempoRespuesta[i]);
                     }
                     System.out.println(toGreen("Tiempos de respuesta detectados y añadidos."));
                 }
@@ -60,9 +60,9 @@ public class History {
             if (eltoInter == null) {
                 System.out.println(toRed("No se encuentran interracciones anteriores."));
             }else{
-                Elements inters = eltoInter.getChildElements(INTERACTIONS);
+                Elements inters = eltoInter.getChildElements(INTERACTION);
+                 inter = new ArrayList<>();
                 if (inters.size()==0) { 
-                    inter = new ArrayList<>();
                     System.out.println("No hay ninguna interaccion.");
                 }else{
                     for (int i = 0; i < inters.size(); i++) {
@@ -93,15 +93,10 @@ public class History {
         Interaccion nueva = newInteraccion();
         
         int i=0;
-        System.out.println("nueva inter "+inter.size());
-        if (inter.size()>i) {
-            System.out.println("si");
-        }else System.out.println("no");
-        nueva.getDate();
-        
         while (i<inter.size() && !nueva.getDate().masReciente(inter.get(i).getDate())) {
             i++;
         }
+        System.out.println("se añade en la posicion "+i);
         inter.add(i, nueva);
     }
     
@@ -369,7 +364,7 @@ public class History {
         return true;
     }
 
-    public void graphycByTime() {
+    public void QuantityGraphycByTime() {
         
         /*
         
@@ -380,16 +375,40 @@ public class History {
         2|    |      |      |      |      |      |      |             |      _      _
         1|____|______|______|______|______|______|______|_____________|______|______|
             12:23  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33
-        
         */
         System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void contInteracion() {
         //esperar confirmacion del usuario
-        //si el tiempo desde el ultimo porro introducido es menor qu 20 min añade un nuevo dato a la ultima interraccin
+        //si es la primera int no importa el tiempo de espera
+        //si el tiempo desde la ultima interaccion es mayor que 10 ( la maquina ya ha esperado 10 min antes) hace una media entre la ultima int y esta
+        Calendar c1=Calendar.getInstance();
+        waitTillEnter();
+        Calendar c2=Calendar.getInstance();
+        HTC actual;
+        //HTC actual= new Interaccion();
+        
+        if (inter.get(0).getHtc().size()>0) {//true- hay mas de un obj en thc
+            if (getDifTiempo(c1)>600000) {
+                inter.get(0).addHtcInteracion(getHTCIntermedios(actual));
+            }
+        }
         
         System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private HTC getHTCIntermedios(HTC nueva){
+        HTC anterior=inter.get(0).getHtc().get(inter.get(0).getHtc().size()-1);
+        int aux=nueva.getHora();
+        if (nueva.getHora()==0) {
+            aux=24;
+        }
+        int hora=(anterior.getHora()+nueva.getHora())/2;
+        if (aux>nueva.getHora()) hora-=12;//ya tenemos la hora
+        
+        int horaMinuto=(anterior.getMinuto()+nueva.getMinuto())/2;
+        int horaMedia=(anterior.getHora()+nueva.getHora())/2;
     }
     
     public Element toDom(){
@@ -399,13 +418,14 @@ public class History {
         
         Element eltoT;
         for (int i = 0; i < tiempoRespuesta.length; i++) {
-            eltoT =new Element(INTERACTIONS);
+            eltoT =new Element(TIMES);
             eltoT.appendChild(Double.toString(tiempoRespuesta[i]));
             eltoResponseTime.appendChild(eltoT);
         }
         
         for (Interaccion interc: inter) {
             eltoInter.appendChild(interc.toDom());
+            
         }
         
         raiz.appendChild(eltoResponseTime);

@@ -26,7 +26,7 @@ public class HTC {
     public HTC(int hora, int minuto, int level) {
         this.hora = hora;
         this.minuto = minuto;
-        this.level = level;
+        this.level = level; //los niveles van de 1 hasta 10
     }
     
     public HTC(Element e){
@@ -74,6 +74,7 @@ public class HTC {
     public void setLevel(int level) {
         this.level = level;
     }
+    
     
     public Element toDom(){
         Element raiz= new Element(HTC);
