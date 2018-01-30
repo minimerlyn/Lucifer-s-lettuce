@@ -379,36 +379,55 @@ public class History {
         System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void contInteracion() {
+    public void contInteracion() {//acabar
         //esperar confirmacion del usuario
         //si es la primera int no importa el tiempo de espera
         //si el tiempo desde la ultima interaccion es mayor que 10 ( la maquina ya ha esperado 10 min antes) hace una media entre la ultima int y esta
         Calendar c1=Calendar.getInstance();
         waitTillEnter();
         Calendar c2=Calendar.getInstance();
-        HTC actual;
-        //HTC actual= new Interaccion();
+        System.out.println("Cometer "+toRed("errores")+ " supone una penalizacion de tiempo.");
+        int i,j,k;
+        k=0;
+        int errores=0;
+        boolean correcto;
+        System.out.println("Pulsa enter para empeza la prueba de "+toBlue("suma")+":");
+        Calendar c3=Calendar.getInstance();
+        while (k<3) {
+            i = (int) Math.floor(Math.random()*9);
+            j = (int) Math.floor(Math.random()*9);
+            correcto= leerNum(Integer.toString(i)+" + "+Integer.toString(j)+" = ") == i+j;
+            if (!correcto) errores++;
+            k++;
+        }
+        //como continuo??
         
+        //HTC actual= new Interaccion();
         if (inter.get(0).getHtc().size()>0) {//true- hay mas de un obj en thc
-            if (getDifTiempo(c1)>600000) {
+            if (getDifTiempo(c1)>600000) {//hacer aqui un while (mientras las diff de tiempo sean mayores que 20 min
                 inter.get(0).addHtcInteracion(getHTCIntermedios(actual));
             }
         }
-        
+        inter.get(0).addHtcInteracion(actual);
         System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     private HTC getHTCIntermedios(HTC nueva){
         HTC anterior=inter.get(0).getHtc().get(inter.get(0).getHtc().size()-1);
-        int aux=nueva.getHora();
-        if (nueva.getHora()==0) {
-            aux=24;
-        }
-        int hora=(anterior.getHora()+nueva.getHora())/2;
-        if (aux>nueva.getHora()) hora-=12;//ya tenemos la hora
         
-        int horaMinuto=(anterior.getMinuto()+nueva.getMinuto())/2;
-        int horaMedia=(anterior.getHora()+nueva.getHora())/2;
+        int aux=nueva.getHora();
+        if (aux==0) aux=24;
+        int hora=(anterior.getHora()+aux)/2;
+        if (aux<anterior.getHora()) hora-=12;//ya tenemos la hora
+        
+        aux=nueva.getMinuto();
+        if (aux==0) aux=60;
+        int minuto=(anterior.getHora()+aux)/2;
+        if (aux<anterior.getMinuto()) minuto-=60;
+        
+        int level = (anterior.getLevel()+nueva.getLevel())/2;
+        
+        return new HTC(hora,minuto,level);
     }
     
     public Element toDom(){

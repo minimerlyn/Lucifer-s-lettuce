@@ -21,6 +21,7 @@ public class Interaccion extends Object{
     private static final String TOTAL_WEIGHT="TOTAL_WEIGHT";
     private static final String FILTER="FILTER";
     private static final String DATE="DATE";
+    private static final String HTCs="HTCs";
     private static final String HTC="HTC";
     
     private float peso;
@@ -54,7 +55,7 @@ public class Interaccion extends Object{
         }else this.tipoFiltro = Integer.parseInt(elem.getFirstChildElement(FILTER).getValue());
         
         htc = new ArrayList<>();
-        if (elem.getFirstChildElement(HTC) == null) {
+        if (elem.getFirstChildElement(HTCs) == null) {
             System.out.println(toRed("htc esta vacio o hay un error"));
         }else{
             Elements htcs = elem.getChildElements(HTC);
@@ -244,7 +245,7 @@ public class Interaccion extends Object{
         Element eltoPeso = new Element(WEIGHT);
         Element eltoPesoTotal = new Element(TOTAL_WEIGHT);
         Element eltoTipoFiltro = new Element(FILTER);
-        Element eltoHtc = new Element(HTC);
+        Element eltoHtc = new Element(HTCs);
         
         eltoPeso.appendChild(Float.toString(peso));
         eltoPesoTotal.appendChild(Float.toString(pesoTotal));
@@ -255,8 +256,9 @@ public class Interaccion extends Object{
         raiz.appendChild(eltoTipoFiltro);
         raiz.appendChild(date.toDom());
         for (int i = 0; i < htc.size(); i++) {
-            raiz.appendChild(htc.get(i).toDom());
+            eltoHtc.appendChild(htc.get(i).toDom());
         }
+        raiz.appendChild(eltoHtc);
         
         return raiz;
     }
