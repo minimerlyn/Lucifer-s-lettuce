@@ -109,14 +109,17 @@ public class Interaccion extends Object{
     public String toStringResumen(){
         StringBuilder toret = new StringBuilder();
         toret.append(getDay()).append("\t").
-                            append("Peso Maria/Peso total: ").append(getPeso()).append("/").append(getPesoTotal());
+                            append("Peso Maria/Peso total: ").append(getPeso()).append("/").append(getPesoTotal()).
+                            append("\tPorcentaje:").append((peso * 100)/pesoTotal).append("%");
         return toret.toString();
     }
+    
     @Override
     public String toString(){
         StringBuilder toret = new StringBuilder();
-        toret.append(getDay()).append("\n\t");
-        toret.append("Peso Maria/Peso total: ").append(getPeso()).append("/").append(getPesoTotal());
+        toret.append(getDay());
+        toret.append("\n\tPeso Maria/Peso total: ").append(getPeso()).append("/").append(getPesoTotal());
+        toret.append("\n\tPorcentaje:").append((peso * 100)/pesoTotal).append("%");
         toret.append("\nTipo de filtro: ");
         switch (tipoFiltro) {
             case 1:

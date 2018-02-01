@@ -434,19 +434,27 @@ public class History {
                 i=(int) Math.floor(Math.random()*posiblesCadenas.length);
             } while (cad.contains(i));
             cad.add(i);
-            System.out.println("->"+posiblesCadenas[i]);
-            String answer =leerCad("->").toLowerCase();
-            if (posiblesCadenas[i].toLowerCase().equals(answer)) {
+            System.out.println("->"+posiblesCadenas[i]);//Cadena a imitar
+            String answer =leerCad("->").toLowerCase();//lee la cadena
+            if (posiblesCadenas[i].toLowerCase().equals(answer)) {//true= no hay errores
                 int letra=0;
                 while (letra<posiblesCadenas[i].length()) {
                     if (posiblesCadenas[i].toLowerCase().charAt(letra)!=answer.toLowerCase().charAt(letra)) {
-                        answer.
+                        errores[2]++;
+                        //hacer comprobacion de si se comio una letra o puso una de más
+                        if (letra>0) {//puedo mirar si sobra una letra
+                            
+                        }
+                        if (letra<posiblesCadenas[i].length()-1) {//puedo mirar si falta una letra
+                            
+                        }
                     }
+                    
+                    letra++;
                 }
             }
-            k++;
-            j+=posiblesCadenas[i].length();
             
+            j+=posiblesCadenas[i].length();
             k++;
         }
         tiempos[0]=getDifTiempo(c1);
