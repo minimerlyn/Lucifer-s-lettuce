@@ -1,0 +1,2 @@
+.
+                            append("\tPorcentaje:").append((peso * 100)/pesoTotal).append("%");
