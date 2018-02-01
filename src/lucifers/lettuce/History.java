@@ -272,7 +272,6 @@ public class History {
                 cad.add(i);
                 System.out.println("->"+posiblesCadenas[i]);
                 correcto= posiblesCadenas[i].toLowerCase().equals(leerCad("->").toLowerCase());
-                time+=getDifTiempo(cal);
                 k++;
                 j+=posiblesCadenas[i].length();
                 if (!correcto) {
@@ -364,6 +363,9 @@ public class History {
         return true;
     }
 
+    /**
+     *  @decrypted
+     */
     public void QuantityGraphycByTime() {
         
         /*
@@ -377,30 +379,77 @@ public class History {
             12:23  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33
         */
         System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
+    
 
     public void contInteracion() {//acabar
         //esperar confirmacion del usuario
         //si es la primera int no importa el tiempo de espera
         //si el tiempo desde la ultima interaccion es mayor que 10 ( la maquina ya ha esperado 10 min antes) hace una media entre la ultima int y esta
-        Calendar c1=Calendar.getInstance();
+        Calendar c0=Calendar.getInstance();
         waitTillEnter();
-        Calendar c2=Calendar.getInstance();
+        double t1=getDifTiempo(c0);
         System.out.println("Cometer "+toRed("errores")+ " supone una penalizacion de tiempo.");
         int i,j,k;
         k=0;
-        int errores=0;
+        float [] tiempos = new float[3];
+        int [] errores=new int[3];
+        
         boolean correcto;
         System.out.println("Pulsa enter para empeza la prueba de "+toBlue("suma")+":");
-        Calendar c3=Calendar.getInstance();
+        errores[0]=0;
+        Calendar c1=Calendar.getInstance();
         while (k<3) {
             i = (int) Math.floor(Math.random()*9);
             j = (int) Math.floor(Math.random()*9);
             correcto= leerNum(Integer.toString(i)+" + "+Integer.toString(j)+" = ") == i+j;
-            if (!correcto) errores++;
+            if (!correcto) errores[0]++;
             k++;
         }
-        //como continuo??
+        tiempos[0]=getDifTiempo(c1);
+        
+        k=0;
+        System.out.println("Pulsa enter para empeza la prueba de "+toBlue("multiplicacion")+":");
+        errores[1]=0;
+        Calendar c2=Calendar.getInstance();
+        while (k<3) {
+            i = (int) Math.floor(Math.random()*9);
+            j = (int) Math.floor(Math.random()*9);
+            correcto= leerNum(Integer.toString(i)+" + "+Integer.toString(j)+" = ") == i*j;
+            if (!correcto) errores[1]++;
+            k++;
+        }
+        tiempos[1]=getDifTiempo(c1);
+        
+        k=j=0;
+        System.out.println("Pulsa enter para empeza la prueba de "+toBlue("escritura")+":");
+        errores[2]=0;
+        ArrayList<Integer> cad = new ArrayList<>();
+        Calendar c3=Calendar.getInstance();
+        while (k<2) {
+            i = (int) Math.floor(Math.random()*9);
+            System.out.println("Escribe la siguiente cadena:");
+            do {//para que no se repitan las cadenas.
+                i=(int) Math.floor(Math.random()*posiblesCadenas.length);
+            } while (cad.contains(i));
+            cad.add(i);
+            System.out.println("->"+posiblesCadenas[i]);
+            String answer =leerCad("->").toLowerCase();
+            if (posiblesCadenas[i].toLowerCase().equals(answer)) {
+                int letra=0;
+                while (letra<posiblesCadenas[i].length()) {
+                    if (posiblesCadenas[i].toLowerCase().charAt(letra)!=answer.toLowerCase().charAt(letra)) {
+                        answer.
+                    }
+                }
+            }
+            k++;
+            j+=posiblesCadenas[i].length();
+            
+            k++;
+        }
+        tiempos[0]=getDifTiempo(c1);
         
         //HTC actual= new Interaccion();
         if (inter.get(0).getHtc().size()>0) {//true- hay mas de un obj en thc
