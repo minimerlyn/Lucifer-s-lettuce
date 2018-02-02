@@ -218,7 +218,7 @@ public class History {
             time=0;
             cal=Calendar.getInstance();
             correcto=true;
-            while (k<5 && correcto) {
+            while (k<CALIBRATION_ARITHMETIC_TRYS && correcto) {
                 i = (int) Math.floor(Math.random()*9);
                 j = (int) Math.floor(Math.random()*9);
                 correcto= leerNum(Integer.toString(i)+" + "+Integer.toString(j)+" = ") == i+j;
@@ -239,7 +239,7 @@ public class History {
             k=0;
             cal=Calendar.getInstance();
             correcto=true;
-            while (k<5 && correcto) {
+            while (k<CALIBRATION_ARITHMETIC_TRYS && correcto) {
                 i = (int) Math.floor(Math.random()*9);
                 j = (int) Math.floor(Math.random()*9);
                 correcto= leerNum(Integer.toString(i)+" * "+Integer.toString(j)+" = ") == i*j;
@@ -261,10 +261,9 @@ public class History {
             cal=Calendar.getInstance();
             k=j=0;
             i=-1;
-            time=0;
             correcto=true;
             cad = new ArrayList<>(4);
-            while (k<4 && correcto) {
+            while (k<CALIBRATION_STRING_TRYS && correcto) {
                 System.out.println("Escribe la siguiente cadena:");
                 do {//para que no se repitan las cadenas.
                     i=(int) Math.floor(Math.random()*posiblesCadenas.length);
@@ -400,7 +399,7 @@ public class History {
         System.out.println("Pulsa enter para empeza la prueba de "+toBlue("suma")+":");
         errores[0]=0;
         Calendar c1=Calendar.getInstance();
-        while (k<3) {
+        while (k<INTERACTION_ARITHMETIC_TRYS) {
             i = (int) Math.floor(Math.random()*9);
             j = (int) Math.floor(Math.random()*9);
             correcto= leerNum(Integer.toString(i)+" + "+Integer.toString(j)+" = ") == i+j;
@@ -413,7 +412,7 @@ public class History {
         System.out.println("Pulsa enter para empeza la prueba de "+toBlue("multiplicacion")+":");
         errores[1]=0;
         Calendar c2=Calendar.getInstance();
-        while (k<3) {
+        while (k<INTERACTION_ARITHMETIC_TRYS) {
             i = (int) Math.floor(Math.random()*9);
             j = (int) Math.floor(Math.random()*9);
             correcto= leerNum(Integer.toString(i)+" + "+Integer.toString(j)+" = ") == i*j;
@@ -427,8 +426,7 @@ public class History {
         errores[2]=0;
         ArrayList<Integer> cad = new ArrayList<>();
         Calendar c3=Calendar.getInstance();
-        while (k<2) {
-            i = (int) Math.floor(Math.random()*9);
+        while (k<INTERACTION_STRING_TRYS) {
             System.out.println("Escribe la siguiente cadena:");
             do {//para que no se repitan las cadenas.
                 i=(int) Math.floor(Math.random()*posiblesCadenas.length);

@@ -14,10 +14,10 @@ import nu.xom.Element;
  */
 public class Date {
     private static final String DATE="DATE";
-    private final static String DAY="DAY";
-    private final static String MONTH="MONTH";
-    private final static String HOURE="HOURE";
-    private final static String MINUTE="MINUTE";
+    private static final String DAY="DAY";
+    private static final String MONTH="MONTH";
+    private static final String HOURE="HOURE";
+    private static final String MINUTE="MINUTE";
     
     private int day;
     private int month;

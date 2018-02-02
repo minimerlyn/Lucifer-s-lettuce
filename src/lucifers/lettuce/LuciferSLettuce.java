@@ -67,10 +67,11 @@ public class LuciferSLettuce {
             try{
                 System.out.println("Tiempo restante "+ minLeft+" min.");
                 Thread.sleep(1000*60);
-                minLeft--;
             }catch (InterruptedException x){
                 System.out.println(toRed("Fallo al esperar el tiempo estimado."));
+                minLeft=0;
             }
+             minLeft--;
         }
     }
     

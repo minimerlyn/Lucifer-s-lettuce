@@ -6,7 +6,6 @@
 package Auxiliar;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -14,6 +13,11 @@ import java.util.Scanner;
  * @author reyga
  */
 public class Auxiliar {
+    public static final int CALIBRATION_ARITHMETIC_TRYS=5;
+    public static final int CALIBRATION_STRING_TRYS=4;
+    public static final int INTERACTION_ARITHMETIC_TRYS=3;
+    public static final int INTERACTION_STRING_TRYS=2;
+    
     public static String [] posiblesCadenas = {"Me comi una zapatilla con aceitunas", "Mi perro es verde porque se enfado",
                                                "Estoy tan drogado que no se leer bien", "Cada dia me como al menos un huevo",
                                                 "Me encanta jugar con el ordenador apagado", "Tonto el que lo lea al reves",
