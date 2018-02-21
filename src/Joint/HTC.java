@@ -91,10 +91,17 @@ public class HTC {
     public void setTiempos(float[] t){
         tiempos=t;
     }
+    
     public float[] getTiempos(){
         return tiempos;
     } 
     
+    public float getTiempo(int i){
+        if (i<tiempos.length) {
+            return tiempos[i];
+        }
+        return -1;
+    }
     public void setErrores(int[] e){
         errores=e;
     }

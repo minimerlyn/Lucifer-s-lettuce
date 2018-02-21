@@ -136,7 +136,7 @@ public class Interaccion extends Object{
         return toret.toString();
     } 
     
-    public String graphycByTime() {
+    public String graphycByTime() {// hacer funcionar con tiempos
         /*
         
          6|                  ________
@@ -157,6 +157,7 @@ public class Interaccion extends Object{
             2: "______"
             3: 
         */
+        float mayor=getMayorTiempo(htc);
         StringBuilder toret = new StringBuilder();
         int i;
         for (int j = getHighHtcLevel(); j > 1; j--) {
@@ -231,6 +232,44 @@ public class Interaccion extends Object{
         
         return toret.toString();
     }
+    
+    private float getMayorTiempo(){
+        float toret=0;
+        float provisional=0;
+        for (int i = 0; i < htc.size(); i++) {
+            for (int j = 0; j < INTERACTION_TIMES; j++) {
+                provisional+=htc.get(i).getTiempo(j);
+            }
+            if (toret<provisional) {
+                toret=provisional;
+            }
+        }
+        return toret;
+    }
+    private float getMenorTiempo(){
+        float toret=Integer.MAX_VALUE;
+        float provisional=0;
+        for (int i = 0; i < htc.size(); i++) {
+            for (int j = 0; j < INTERACTION_TIMES; j++) {
+                provisional+=htc.get(i).getTiempo(j);
+            }
+            if (toret>provisional) {
+                toret=provisional;
+            }
+        }
+        return toret;
+    }
+    private float getMedioTiempo(){
+        float toret=0;
+        
+        for (int i = 0; i < htc.size(); i++) {
+            for (int j = 0; j < INTERACTION_TIMES; j++) {
+                toret+=htc.get(i).getTiempo(j);
+            }
+        }
+        return toret/htc.size();
+    }
+    
     
     private int getHighHtcLevel(){// los niveles van de 1 a 10
         int mayor=0;

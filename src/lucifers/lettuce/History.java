@@ -392,8 +392,8 @@ public class History {
         System.out.println("Cometer "+toRed("errores")+ " supone una penalizacion de tiempo.");
         int i,j,k;
         k=0;
-        float [] tiempos = new float[3];
-        int [] errores=new int[3];
+        float [] tiempos = new float[INTERACTION_TIMES];
+        int [] errores=new int[INTERACTION_TIMES];
         
         boolean correcto;
         System.out.println("Pulsa enter para empeza la prueba de "+toBlue("suma")+":");
@@ -479,7 +479,6 @@ public class History {
             }
         }
         inter.get(0).addHtcInteracion(actual);
-        
     }
     
     private HTC getHTCIntermedios(HTC nueva){
