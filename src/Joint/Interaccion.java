@@ -101,9 +101,6 @@ public class Interaccion extends Object{
     public void addHtcInteracion(HTC i){
         htc.add(i);
     }
-    public void addHtcInteracion(int hora, int min, int level){
-        htc.add(new HTC(hora,min,level));
-    }
     
     
     public String toStringResumen(){

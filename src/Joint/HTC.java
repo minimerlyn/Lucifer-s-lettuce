@@ -18,21 +18,27 @@ public class HTC {
     private static final String HOURE = "HOURE";
     private static final String MINUTE = "MINUTE";
     private static final String LEVEL = "LEVEL";
+    private static final String TIMES = "TIMES";
+    private static final String MISTAKES = "MISTAKES";
     
     private int hora;
     private int minuto;
     private int level;
+    private float[] tiempos;
+    private int [] errores;
 
-    public HTC(int hora, int minuto, int level) {
+    public HTC(int hora, int minuto, float [] ts, int[] er) {
         this.hora = hora;
         this.minuto = minuto;
-        this.level = level; //los niveles van de 1 hasta 10
+        tiempos=ts;
+        errores= er;
     }
     
     public HTC(Element e){
-        Element eltoHora = e.getFirstChildElement( HOURE);
-        Element eltoMinuto = e.getFirstChildElement( MINUTE);
-        Element eltoLevel = e.getFirstChildElement( LEVEL);
+        Element eltoHora = e.getFirstChildElement( HOURE );
+        Element eltoMinuto = e.getFirstChildElement( MINUTE );
+        Element eltoLevel = e.getFirstChildElement( LEVEL );
+        Element eltoTimes = e.getFirstChildElement( TIMES );
         
         
         if ( eltoHora == null ) {
@@ -49,6 +55,13 @@ public class HTC {
             level=0;
             System.out.println(toRed( "Error con nivel." ));
         }else level=Integer.parseInt(toRed(eltoLevel.getValue()));
+        
+        if (eltoTimes == null ) {
+            tiempos= new float[3];
+            System.out.println("Error con los tiempos del HTC con hora: "+hora+":"+minuto);
+        }else {
+            
+        }
     }
 
     public int getHora() {
@@ -75,6 +88,19 @@ public class HTC {
         this.level = level;
     }
     
+    public void setTiempos(float[] t){
+        tiempos=t;
+    }
+    public float[] getTiempos(){
+        return tiempos;
+    } 
+    
+    public void setErrores(int[] e){
+        errores=e;
+    }
+    public int[] getErrores(){
+        return errores;
+    }
     
     public Element toDom(){
         Element raiz= new Element(HTC);

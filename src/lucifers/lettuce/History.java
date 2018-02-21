@@ -411,7 +411,7 @@ public class History {
         k=0;
         System.out.println("Pulsa enter para empeza la prueba de "+toBlue("multiplicacion")+":");
         errores[1]=0;
-        Calendar c2=Calendar.getInstance();
+        c1=Calendar.getInstance();
         while (k<INTERACTION_ARITHMETIC_TRYS) {
             i = (int) Math.floor(Math.random()*9);
             j = (int) Math.floor(Math.random()*9);
@@ -425,7 +425,7 @@ public class History {
         System.out.println("Pulsa enter para empeza la prueba de "+toBlue("escritura")+":");
         errores[2]=0;
         ArrayList<Integer> cad = new ArrayList<>();
-        Calendar c3=Calendar.getInstance();
+        c1=Calendar.getInstance();
         while (k<INTERACTION_STRING_TRYS) {
             System.out.println("Escribe la siguiente cadena:");
             do {//para que no se repitan las cadenas.
@@ -434,37 +434,52 @@ public class History {
             cad.add(i);
             System.out.println("->"+posiblesCadenas[i]);//Cadena a imitar
             String answer =leerCad("->").toLowerCase();//lee la cadena
-            if (posiblesCadenas[i].toLowerCase().equals(answer)) {//true= no hay errores
-                int letra=0;
-                while (letra<posiblesCadenas[i].length()) {
-                    if (posiblesCadenas[i].toLowerCase().charAt(letra)!=answer.toLowerCase().charAt(letra)) {
+            if (!posiblesCadenas[i].toLowerCase().equals(answer)) {//true= hay errores
+                int letra =0;
+                int letra2=0;
+                int indice=0;//sobra?
+                while (indice<answer.length()) {//confirmar
+                    if (posiblesCadenas[i].toLowerCase().charAt(letra)!=answer.toLowerCase().charAt(letra2)) {
                         errores[2]++;
                         //hacer comprobacion de si se comio una letra o puso una de más
                         if (letra>0) {//puedo mirar si sobra una letra
-                            
+                            if (posiblesCadenas[i].toLowerCase().charAt(letra-1)==
+                                    answer.toLowerCase().charAt((letra2))) {
+                                letra--;
+                            }
                         }
                         if (letra<posiblesCadenas[i].length()-1) {//puedo mirar si falta una letra
                             
+                            if (posiblesCadenas[i].toLowerCase().charAt(letra)==
+                                    answer.toLowerCase().charAt((letra2+1))) {
+                                letra2++;
+                            }
                         }
                     }
                     
                     letra++;
+                    letra2++;
+                    indice++;
+                }
+                if (answer.length()!=posiblesCadenas[i].length()) {//añade la diferencia de long de cadenas
+                    errores[2]+=answer.length()<posiblesCadenas[i].length()?
+                            posiblesCadenas[i].length()-answer.length():answer.length()-posiblesCadenas[i].length();
                 }
             }
             
             j+=posiblesCadenas[i].length();
             k++;
         }
-        tiempos[0]=getDifTiempo(c1);
-        
-        //HTC actual= new Interaccion();
+        tiempos[2]=getDifTiempo(c1);
+        c1=Calendar.getInstance();
+        HTC actual= new HTC(c1.get(Calendar.HOUR_OF_DAY),c1.get(Calendar.MINUTE),tiempos,errores);
         if (inter.get(0).getHtc().size()>0) {//true- hay mas de un obj en thc
-            if (getDifTiempo(c1)>600000) {//hacer aqui un while (mientras las diff de tiempo sean mayores que 20 min
+            if (t1>600000) {//hacer aqui un while (mientras las diff de tiempo sean mayores que 20 min
                 inter.get(0).addHtcInteracion(getHTCIntermedios(actual));
             }
         }
         inter.get(0).addHtcInteracion(actual);
-        System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
     private HTC getHTCIntermedios(HTC nueva){
@@ -480,9 +495,21 @@ public class History {
         int minuto=(anterior.getHora()+aux)/2;
         if (aux<anterior.getMinuto()) minuto-=60;
         
-        int level = (anterior.getLevel()+nueva.getLevel())/2;
+        float[] tiempos = new float [3];
+        float[] t1 = nueva.getTiempos();
+        float[] t2=anterior.getTiempos();
+        for (int i = 0; i < 3; i++) {
+            tiempos[i]=(t1[i]+t2[i])/2;
+        }
         
-        return new HTC(hora,minuto,level);
+        int[] errores = new int [3];
+        int[] e1 = nueva.getErrores();
+        int[] e2=anterior.getErrores();
+        for (int i = 0; i < 3; i++) {
+            errores[i]=(e1[i]+e2[i])/2;
+        }
+        return new HTC(hora,minuto,tiempos,errores);
+        
     }
     
     public Element toDom(){
