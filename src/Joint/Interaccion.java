@@ -157,7 +157,7 @@ public class Interaccion extends Object{
             2: "______"
             3: 
         */
-        float mayor=getMayorTiempo(htc);
+        float mayor=getTiempo(2);
         StringBuilder toret = new StringBuilder();
         int i;
         for (int j = getHighHtcLevel(); j > 1; j--) {
@@ -233,32 +233,61 @@ public class Interaccion extends Object{
         return toret.toString();
     }
     
-    private float getMayorTiempo(){
+    /**
+     * 
+     * @param n 0- menor tiempo, 1- mayor tiempo
+     * @return el menor/maypr tiempo
+     */
+    private float getTiempo(int n){
         float toret=0;
-        float provisional=0;
+        float provisional;
+        float auxiliar;
+        int nErrores;
+        int penalizacion;
         for (int i = 0; i < htc.size(); i++) {
+            provisional=0;
             for (int j = 0; j < INTERACTION_TIMES; j++) {
-                provisional+=htc.get(i).getTiempo(j);
+                auxiliar=htc.get(i).getTiempo(j);
+                nErrores=htc.get(i).getError(j);
+                if (nErrores>0) {
+                    switch (j) {
+                        case 0:
+                        case 1:
+                            penalizacion=PENALTY_FOR_MISTAKES_ARITHMETIC+ (--nErrores*ENCREASE_MULTIPLE_MISTAKES_ARITHMETIC);
+                            break;
+                        case 2:
+                            penalizacion=PENALTY_FOR_MISTAKES_STRING+ (--nErrores*ENCREASE_MULTIPLE_MISTAKES_STRING);
+                            break;
+                        default: System.out.println(toRed("getTiempo, 2 for, j is overextending."));
+                            penalizacion=0;
+                    }
+                }else penalizacion=0;
+                if (penalizacion>100) {
+                    System.out.println(toRed("mas de 100 de penalizacion, deja la lechuga tío."));
+                }
+                provisional+= auxiliar+((auxiliar*penalizacion)/100);
             }
+            
             if (toret<provisional) {
                 toret=provisional;
             }
-        }
-        return toret;
-    }
-    private float getMenorTiempo(){
-        float toret=Integer.MAX_VALUE;
-        float provisional=0;
-        for (int i = 0; i < htc.size(); i++) {
-            for (int j = 0; j < INTERACTION_TIMES; j++) {
-                provisional+=htc.get(i).getTiempo(j);
-            }
-            if (toret>provisional) {
-                toret=provisional;
+            switch (i) {
+                case 0:
+                    toret=toret>provisional?provisional:toret;
+                    break;
+                case 1:
+                    toret=toret<provisional?provisional:toret;
+                    break;
+                default:
+                    System.out.println(toRed("getTiempo(int n), parametro demasiado alto o incorrecto."));
             }
         }
         return toret;
     }
+    /**
+     * @deprecated 
+     * @return el tiempo medio aritmetico sin mirar los errores 
+     */
     private float getMedioTiempo(){
         float toret=0;
         

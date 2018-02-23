@@ -100,6 +100,7 @@ public class HTC {
         if (i<tiempos.length) {
             return tiempos[i];
         }
+        System.out.println(toRed("ERROR EN getTiempo(int i), PARAM MAYOR QUE tiempos.LENGTH"));
         return -1;
     }
     public void setErrores(int[] e){
@@ -107,6 +108,14 @@ public class HTC {
     }
     public int[] getErrores(){
         return errores;
+    }
+    
+    public int getError(int i){
+        if (i<errores.length) {
+            return errores[i];
+        }
+        System.out.println(toRed("ERROR EN getErrores(int i), PARAM MAYOR QUE ERRORES.LENGTH"));
+        return -1;
     }
     
     public Element toDom(){

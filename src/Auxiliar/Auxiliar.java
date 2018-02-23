@@ -18,11 +18,16 @@ public class Auxiliar {
     public static final int INTERACTION_ARITHMETIC_TRYS=3;
     public static final int INTERACTION_STRING_TRYS=2;
     public static final int INTERACTION_TIMES=3;
+    public static final int PENALTY_FOR_MISTAKES_ARITHMETIC=10;
+    public static final int ENCREASE_MULTIPLE_MISTAKES_ARITHMETIC=5; 
+    public static final int PENALTY_FOR_MISTAKES_STRING=5;
+    public static final int ENCREASE_MULTIPLE_MISTAKES_STRING=5;
+    
     
     public static String [] posiblesCadenas = {"Me comi una zapatilla con aceitunas", "Mi perro es verde porque se enfado",
                                                "Estoy tan drogado que no se leer bien", "Cada dia me como al menos un huevo",
                                                 "Me encanta jugar con el ordenador apagado", "Tonto el que lo lea al reves",
-                                                "Me apetece caminar descalzo sobre lava", "Suelo beber pegamento cuando me despierto"};
+                                                "Me gusta caminar descalzo sobre lava", "Suelo beber pegamento cuando me despierto"};
     
     private static void imprimirCad(String ... st){
         StringBuilder cad = new StringBuilder();
