@@ -241,33 +241,8 @@ public class Interaccion extends Object{
     private float getTiempo(int n){
         float toret=0;
         float provisional;
-        float auxiliar;
-        int nErrores;
-        int penalizacion;
         for (int i = 0; i < htc.size(); i++) {
-            provisional=0;
-            for (int j = 0; j < INTERACTION_TIMES; j++) {
-                auxiliar=htc.get(i).getTiempo(j);
-                nErrores=htc.get(i).getError(j);
-                if (nErrores>0) {
-                    switch (j) {
-                        case 0:
-                        case 1:
-                            penalizacion=PENALTY_FOR_MISTAKES_ARITHMETIC+ (--nErrores*ENCREASE_MULTIPLE_MISTAKES_ARITHMETIC);
-                            break;
-                        case 2:
-                            penalizacion=PENALTY_FOR_MISTAKES_STRING+ (--nErrores*ENCREASE_MULTIPLE_MISTAKES_STRING);
-                            break;
-                        default: System.out.println(toRed("getTiempo, 2 for, j is overextending."));
-                            penalizacion=0;
-                    }
-                }else penalizacion=0;
-                if (penalizacion>100) {
-                    System.out.println(toRed("mas de 100 de penalizacion, deja la lechuga tío."));
-                }
-                provisional+= auxiliar+((auxiliar*penalizacion)/100);
-            }
-            
+            provisional=htc.get(i).getTiempoTotal();
             if (toret<provisional) {
                 toret=provisional;
             }
