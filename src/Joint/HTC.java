@@ -120,20 +120,19 @@ public class HTC {
     }
     
     public float getTiempoTotal(){
-        float auxiliar=0;
-        int nErrores;
-        int penalizacion=0;
+        float torret=0;
+        float auxiliar;
+        int penalizacion;
         for (int j = 0; j < INTERACTION_TIMES; j++) {
-                auxiliar=getTiempo(j);
-                nErrores=getError(j);
-                if (nErrores>0) {
+                auxiliar=tiempos[j];
+                if (errores[j]>0) {
                     switch (j) {
                         case 0:
                         case 1:
-                            penalizacion=PENALTY_FOR_MISTAKES_ARITHMETIC+ (--nErrores*ENCREASE_MULTIPLE_MISTAKES_ARITHMETIC);
+                            penalizacion=PENALTY_FOR_MISTAKES_ARITHMETIC+ ((errores[j]-1)*ENCREASE_MULTIPLE_MISTAKES_ARITHMETIC);
                             break;
                         case 2:
-                            penalizacion=PENALTY_FOR_MISTAKES_STRING+ (--nErrores*ENCREASE_MULTIPLE_MISTAKES_STRING);
+                            penalizacion=PENALTY_FOR_MISTAKES_STRING+ ((errores[j]-1)*ENCREASE_MULTIPLE_MISTAKES_STRING);
                             break;
                         default: System.out.println(toRed("getTiempo, 2 for, j is overextending."));
                             penalizacion=0;
@@ -142,8 +141,9 @@ public class HTC {
                 if (penalizacion>100) {
                     System.out.println(toRed("mas de 100 de penalizacion, deja la lechuga tío. en la prueba ")+" "+toRed(Integer.toString(j)));
                 }
+                torret+=auxiliar + ((auxiliar*penalizacion)/100);
             }
-         return (auxiliar+((auxiliar*penalizacion)/100));
+         return torret;
     }
     
     public Element toDom(){

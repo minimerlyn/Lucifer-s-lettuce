@@ -157,7 +157,7 @@ public class Interaccion extends Object{
             2: "______"
             3: 
         */
-        float mayor=getTiempo(2);
+        float mayor=getTiempo(1);
         StringBuilder toret = new StringBuilder();
         int i;
         for (int j = getHighHtcLevel(); j > 1; j--) {
@@ -239,8 +239,11 @@ public class Interaccion extends Object{
      * @return el menor/maypr tiempo
      */
     private float getTiempo(int n){
-        float toret=0;
+        float toret;
         float provisional;
+        if (n==0) {
+            toret=Integer.MAX_VALUE;
+        }else toret=0;
         for (int i = 0; i < htc.size(); i++) {
             provisional=htc.get(i).getTiempoTotal();
             if (toret<provisional) {
