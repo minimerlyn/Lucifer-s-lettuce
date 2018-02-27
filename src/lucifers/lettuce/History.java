@@ -366,7 +366,7 @@ public class History {
      *  @decrypted
      */
     public void QuantityGraphycByTime() {
-        
+        clear();
         /*
         
         6|                  _
@@ -415,7 +415,7 @@ public class History {
         while (k<INTERACTION_ARITHMETIC_TRYS) {
             i = (int) Math.floor(Math.random()*9);
             j = (int) Math.floor(Math.random()*9);
-            correcto= leerNum(Integer.toString(i)+" + "+Integer.toString(j)+" = ") == i*j;
+            correcto= leerNum(Integer.toString(i)+" * "+Integer.toString(j)+" = ") == i*j;
             if (!correcto) errores[1]++;
             k++;
         }
@@ -438,20 +438,21 @@ public class History {
                 int letra =0;
                 int letra2=0;
                 int indice=0;//sobra?
-                while (indice<answer.length()) {//confirmar
-                    if (posiblesCadenas[i].toLowerCase().charAt(letra)!=answer.toLowerCase().charAt(letra2)) {
+                int maximo=answer.length()>posiblesCadenas[i].length()?posiblesCadenas[i].length():answer.length();
+                while (indice<maximo) {//confirmar
+                    if (posiblesCadenas[i].toLowerCase().charAt(letra)!=answer.charAt(letra2)) {
                         errores[2]++;
                         //hacer comprobacion de si se comio una letra o puso una de más
                         if (letra>0) {//puedo mirar si sobra una letra
                             if (posiblesCadenas[i].toLowerCase().charAt(letra-1)==
-                                    answer.toLowerCase().charAt((letra2))) {
+                                    answer.charAt((letra2))) {
                                 letra--;
                             }
                         }
-                        if (letra<posiblesCadenas[i].length()-1) {//puedo mirar si falta una letra
+                        if (letra<maximo-1) {//puedo mirar si falta una letra
                             
                             if (posiblesCadenas[i].toLowerCase().charAt(letra)==
-                                    answer.toLowerCase().charAt((letra2+1))) {
+                                    answer.charAt((letra2+1))) {//ERRROOOORRRR
                                 letra2++;
                             }
                         }
