@@ -64,9 +64,14 @@ public class Auxiliar {
      */
     public static String leerCad(String ... st){
         Scanner scan = new Scanner(System.in);
-        imprimirCad(st);
-        return scan.nextLine().trim();
+        String toret= "";
+        while (toret.length()==0) {
+            imprimirCad(st);
+            toret= scan.nextLine().trim();
+        }
+        return toret;
     }
+    
 
     /**
      * 
@@ -92,7 +97,7 @@ public class Auxiliar {
         }
     }
     
-    public static int parseInt(String st){ //prvate y non static
+    public static int parseInt(String st){ 
         int toret;
         try{
             toret=Integer.parseInt(st);
@@ -123,6 +128,7 @@ public class Auxiliar {
     }
     
     public static void waitTillEnter( ) {
+        System.out.println("Presiona enter para continuar.");
         try{
             while( ( System.in.read() ) != '\n' );
         }catch( IOException exc){

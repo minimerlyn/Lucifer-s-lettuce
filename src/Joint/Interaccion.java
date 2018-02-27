@@ -158,9 +158,10 @@ public class Interaccion extends Object{
             3: 
         */
         float mayor=getTiempo(1);
+        float menor=getTiempo(0);
         StringBuilder toret = new StringBuilder();
         int i;
-        for (int j = getHighHtcLevel(); j > 1; j--) {
+        for (int j = 10; j > 1; j--) {//for (int j = getHighHtcLevel(); j > 1; j--) {
             if (j<10) toret.append(' ');
             toret.append(j).append("|");//ya vamos en el caracter numero 2
             for (i = 0; i < htc.size(); i++) {
@@ -168,30 +169,33 @@ public class Interaccion extends Object{
                     toret.append("    ");
                 }
                 // no es intro
-                    if (htc.get(i).getLevel()==j) {
-                        if (i>0 && htc.get(i-1).getLevel()>htc.get(i).getLevel()) {
+                    if (getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor)==j) {//editado
+                        if (i>0 && getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)
+                                >getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor)) {
                             toret.append("|______");
                         }else toret.append("_______");
                         if((i+1)<htc.size()){// tiene siguiente
                             
                         }
-                    }else if (htc.get(i).getLevel()>j){
+                    }else if (getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor)>j){
                         toret.append("|");
                         if((i+1)<htc.size()){// tiene siguiente
                              toret.append("      ");
                         }
-                    }else if (i>0 && htc.get(i-1).getLevel()>htc.get(i).getLevel() && htc.get(i-1).getLevel()> j) {
+                    }else if (i>0 && getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)>
+                            getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor) && 
+                            getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)> j) {
                             toret.append("|");
                             toret.append("      ");
                     }else {
-                        if(i>0 && htc.get(i-1).getLevel()==j){
+                        if(i>0 && getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)==j){
                                 toret.append("_      ");
                         }else toret.append("       ");
                     }
             }
-            if (htc.get(i-1).getLevel()==j) {
+            if (getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)==j) {
                 toret.append("_");
-            }else if (htc.get(i-1).getLevel()>j){
+            }else if (getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)>j){
                 toret.append("      |");
             }
             toret.append("\n");
@@ -199,18 +203,19 @@ public class Interaccion extends Object{
         toret.append(" 1").append("|____");
         for ( i = 0; i < htc.size(); i++) {
             if (i>0) {
-                if (htc.get(i).getLevel()<=1 && htc.get(i-1).getLevel()<=1 ) {
+                if (getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor)<=1 &&
+                        getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)<=1 ) {
                     toret.append("_");
                 }else toret.append("|");
                 toret.append("______");
             }else{
-                if (htc.get(i).getLevel()<=1) {
+                if (getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor)<=1) {
                 toret.append("_");
                 }else toret.append("|");
                 toret.append("______");
             }
         }
-        if (htc.get(i-1).getLevel()>=1) {
+        if (getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)>=1) {
             toret.append("|");
         }else toret.append("_");
         /*
@@ -231,6 +236,10 @@ public class Interaccion extends Object{
         }
         
         return toret.toString();
+    }
+    
+    private int getLevel(float mayor, float actual){
+        return (int)(actual*mayor/10);
     }
     
     /**
@@ -262,17 +271,11 @@ public class Interaccion extends Object{
         }
         return toret;
     }
-    /**
-     * @deprecated 
-     * @return el tiempo medio aritmetico sin mirar los errores 
-     */
+    
     private float getMedioTiempo(){
         float toret=0;
-        
         for (int i = 0; i < htc.size(); i++) {
-            for (int j = 0; j < INTERACTION_TIMES; j++) {
-                toret+=htc.get(i).getTiempo(j);
-            }
+            toret=htc.get(i).getTiempoTotal();
         }
         return toret/htc.size();
     }

@@ -6,7 +6,7 @@
 package Joint;
 
 import static Auxiliar.Auxiliar.*;
-import nu.xom.Element;
+import nu.xom.*;
 
 /**
  *
@@ -17,9 +17,10 @@ public class HTC {
     private static final String HTC = "HTC";
     private static final String HOURE = "HOURE";
     private static final String MINUTE = "MINUTE";
-    private static final String LEVEL = "LEVEL";
     private static final String TIMES = "TIMES";
+    private static final String TIME = "TIME";
     private static final String MISTAKES = "MISTAKES";
+    private static final String MISTAKE = "MISTAKE";
     
     private int hora;
     private int minuto;
@@ -37,7 +38,7 @@ public class HTC {
     public HTC(Element e){
         Element eltoHora = e.getFirstChildElement( HOURE );
         Element eltoMinuto = e.getFirstChildElement( MINUTE );
-        Element eltoLevel = e.getFirstChildElement( LEVEL );
+        Element eltoErrores = e.getFirstChildElement( MISTAKES );
         Element eltoTimes = e.getFirstChildElement( TIMES );
         
         
@@ -51,16 +52,30 @@ public class HTC {
             System.out.println(toRed( "Falta minuto" ));
         }else minuto=Integer.parseInt(eltoMinuto.getValue());
         
-        if ( eltoLevel == null ) {
-            level=0;
-            System.out.println(toRed( "Error con nivel." ));
-        }else level=Integer.parseInt(toRed(eltoLevel.getValue()));
+        errores=new int[INTERACTION_TIMES];
+        if ( eltoErrores == null ) {
+            for (int i = 0; i < INTERACTION_TIMES; i++) 
+                errores[i]=0;
+            
+            System.out.println(toRed( "Error con los errores del HTC con hora: "+hora+":"+minuto ));
+        }else {
+            Elements eltoSubErrores = eltoErrores.getChildElements(MISTAKE);
+            if (eltoSubErrores.size()!=0) 
+                for (int i = 0; i < eltoSubErrores.size(); i++) 
+                    errores[i]=Integer.parseInt(eltoSubErrores.get(i).getValue());
+        }
         
+        tiempos= new float[INTERACTION_TIMES];
         if (eltoTimes == null ) {
-            tiempos= new float[3];
+            for (int i = 0; i < INTERACTION_TIMES; i++) {
+                tiempos[i]=0;
+            }
             System.out.println("Error con los tiempos del HTC con hora: "+hora+":"+minuto);
         }else {
-            
+            Elements eltoSubTiempos = eltoTimes.getChildElements(TIME);
+            if (eltoSubTiempos.size()!=0) 
+                for (int i = 0; i < eltoSubTiempos.size(); i++) 
+                    tiempos[i]=Float.parseFloat(eltoSubTiempos.get(i).getValue());
         }
     }
 
@@ -80,6 +95,10 @@ public class HTC {
         this.minuto = minuto;
     }
 
+    /**
+     * @deprecated 
+     * @return 
+     */
     public int getLevel() {
         
         return level;
@@ -151,15 +170,29 @@ public class HTC {
         
         Element eltoHoure = new Element(HOURE);
         Element eltoMinute = new Element(MINUTE);
-        Element eltoLevel = new Element(LEVEL);
+        Element eltoTiempos = new Element(TIMES);
+        Element eltoErrores = new Element(MISTAKES);
         
         eltoHoure.appendChild(Integer.toString(hora));
         eltoMinute.appendChild(Integer.toString(minuto));
-        eltoLevel.appendChild(Integer.toString(level));
+        
+        Element eltoAux;
+        for (int i = 0; i < tiempos.length; i++) {
+            eltoAux = new Element(TIME);
+            eltoAux.appendChild(Float.toString(tiempos[i]));
+            eltoTiempos.appendChild(eltoAux);
+        }
+        
+        for (int i = 0; i < errores.length; i++) {
+            eltoAux = new Element(MISTAKE);
+            eltoAux.appendChild(Integer.toString(errores[i]));
+            eltoErrores.appendChild(eltoAux);
+        }
         
         raiz.appendChild(eltoHoure);
         raiz.appendChild(eltoMinute);
-        raiz.appendChild(eltoLevel);
+        raiz.appendChild(eltoTiempos);
+        raiz.appendChild(eltoErrores);
         
         return raiz;
     }
