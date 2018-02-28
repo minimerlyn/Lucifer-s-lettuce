@@ -403,6 +403,7 @@ public class History {
         
         boolean correcto;
         System.out.println("Pulsa enter para empeza la prueba de "+toBlue("suma")+":");
+        waitTillEnter();
         errores[0]=0;
         Calendar c1=Calendar.getInstance();
         while (k<INTERACTION_ARITHMETIC_TRYS) {
@@ -416,6 +417,7 @@ public class History {
         
         k=0;
         System.out.println("Pulsa enter para empeza la prueba de "+toBlue("multiplicacion")+":");
+        waitTillEnter();
         errores[1]=0;
         c1=Calendar.getInstance();
         while (k<INTERACTION_ARITHMETIC_TRYS) {
@@ -429,6 +431,7 @@ public class History {
         
         k=j=0;
         System.out.println("Pulsa enter para empeza la prueba de "+toBlue("escritura")+":");
+        waitTillEnter();
         errores[2]=0;
         ArrayList<Integer> cad = new ArrayList<>();
         c1=Calendar.getInstance();
