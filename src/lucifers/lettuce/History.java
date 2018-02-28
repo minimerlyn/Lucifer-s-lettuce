@@ -28,7 +28,7 @@ public class History {
     
     private ArrayList<Interaccion> inter ;//en la posicion 0 la mas reciente
     //0- suma, 1- mult, 2 cadenas
-    private double [] tiempoRespuesta = new double[3];//3 juegos distintos en milisegundos 
+    private double [] tiempoRespuesta = new double[INTERACTION_TIMES];//3 juegos distintos en milisegundos 
     
     public History() {
         
@@ -205,7 +205,7 @@ public class History {
         }
     }
     
-    private void calibracion(){
+    public  void calibracion(){
         Calendar cal;
         int i,j,k;
         double time;
@@ -215,7 +215,6 @@ public class History {
         waitTillEnter();
         do{
             k=0;
-            time=0;
             cal=Calendar.getInstance();
             correcto=true;
             while (k<CALIBRATION_ARITHMETIC_TRYS && correcto) {
@@ -229,7 +228,7 @@ public class History {
                 }
             }
         }while(!correcto);
-        time+=getDifTiempo(cal);
+        time=getDifTiempo(cal);
         System.out.println("tiempo total: "+time/1000+" seg. Tiempo medio: "+time/5/1000+" seg");
         tiempoRespuesta[0]=(time/k);// se guarda en milisegundos
         
@@ -284,6 +283,13 @@ public class History {
         tiempoRespuesta[2]= (int) time/j;
     }
     
+    private float getCalibraionMedia(){
+        double toret=0;
+        for (int i = 0; i < INTERACTION_TIMES; i++) {
+            toret+=tiempoRespuesta[i];
+        }
+        return (float) toret;
+    }
     
     private int getDifTiempo(Calendar c1){//HORRIBLE POR FAVOR EDITAR
         Calendar c2= Calendar.getInstance();
@@ -512,6 +518,8 @@ public class History {
         
     }
     
+    
+    
     public Element toDom(){
         Element raiz = new Element("HISTORY");
         Element eltoResponseTime= new Element(RESPONSE_TIME);
@@ -561,7 +569,8 @@ public class History {
                         toret.append("\n");
                     }
                 cant+=inter.get(i).getPeso();
-                toret.append(toBlue(Integer.toString(i+1))).append(toBlue(".- ")).append(inter.get(i).toStringResumen());
+                toret.append(toBlue(Integer.toString(i+1))).append(toBlue(".- ")).append(inter.get(i).toStringResumen())
+                        .append("\tTiempo de reaccion medio: x").append(inter.get(i).getMedioTiempo()/getCalibraionMedia());
             }
             toret.append("\nTotal fumado en esta compra: ").append(toGreen(Float.toString(cant)));
             return toret.toString();

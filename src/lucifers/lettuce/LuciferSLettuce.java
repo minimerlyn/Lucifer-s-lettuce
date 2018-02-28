@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author minimerlyn
  */
 public class LuciferSLettuce {
-    private static final int MAX_OPTIONS =5;
+    private static final int MAX_OPTIONS =6;
     private static ArrayList<HTC> htc;
     /**
      * @param args the command line arguments
@@ -35,7 +35,8 @@ public class LuciferSLettuce {
                     + "\n2.- Ver grafica por tiempo."
                     + "\n3.- Nueva interracion."
                     + "\n4.- Esperar 10 min."
-                    + "\n5.- Salir");
+                    + "\n5.- Re-calibracion."
+                    + "\n6.- Salir");
             op=leerOP(MAX_OPTIONS);
             
             switch (op) {
@@ -50,7 +51,9 @@ public class LuciferSLettuce {
                 case 4: pause(10);
                     history.contInteracion();
                     break;
-                case 5:
+                case 5: history.calibracion();
+                    break;
+                case 6:
                     System.out.println("Gracias por usar Lucifer's lettuce.\nHasta otra.");
                     break;
                 default:

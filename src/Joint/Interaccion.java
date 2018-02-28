@@ -107,38 +107,6 @@ public class Interaccion extends Object{
     }
     
     
-    public String toStringResumen(){
-        StringBuilder toret = new StringBuilder();
-        toret.append(getDay()).append("\t").
-                            append("Peso Maria/Peso total: ").append(getPeso()).append("/").append(getPesoTotal()).
-                            append("\tPorcentaje:").append((peso * 100)/pesoTotal).append("%");
-        return toret.toString();
-    }
-    
-    @Override
-    public String toString(){
-        StringBuilder toret = new StringBuilder();
-        toret.append(getDay());
-        toret.append("\n\tPeso Maria/Peso total: ").append(getPeso()).append("/").append(getPesoTotal());
-        toret.append("\n\tPorcentaje:").append((peso * 100)/pesoTotal).append("%");
-        toret.append("\nTipo de filtro: ");
-        switch (tipoFiltro) {
-            case 1:
-                toret.append(" carton.");
-                break;
-            case 2:
-                toret.append(" filtro de carbono.");
-                break;
-            default:
-                toret.append(" desconocido.");
-                break;
-        }
-        toret.append("\n");
-        if (!htc.isEmpty()) {
-            toret.append("\n").append(graphycByTime());
-        }
-        return toret.toString();
-    } 
     
     public String graphycByTime() {// hacer funcionar con tiempos
         /*
@@ -274,7 +242,7 @@ public class Interaccion extends Object{
         return toret;
     }
     
-    private float getMedioTiempo(){
+    public  float getMedioTiempo(){
         float toret=0;
         for (int i = 0; i < htc.size(); i++) {
             toret=htc.get(i).getTiempoTotal();
@@ -306,4 +274,37 @@ public class Interaccion extends Object{
         
         return raiz;
     }
+    
+    public String toStringResumen(){
+        StringBuilder toret = new StringBuilder();
+        toret.append(getDay()).append("\t").
+                            append("Peso Maria/Peso total: ").append(getPeso()).append("/").append(getPesoTotal()).
+                            append("\tPorcentaje:").append((peso * 100)/pesoTotal).append("%");
+        return toret.toString();
+    }
+    
+    @Override
+    public String toString(){
+        StringBuilder toret = new StringBuilder();
+        toret.append(getDay());
+        toret.append("\n\tPeso Maria/Peso total: ").append(getPeso()).append("/").append(getPesoTotal());
+        toret.append("\n\tPorcentaje:").append((peso * 100)/pesoTotal).append("%");
+        toret.append("\nTipo de filtro: ");
+        switch (tipoFiltro) {
+            case 1:
+                toret.append(" carton.");
+                break;
+            case 2:
+                toret.append(" filtro de carbono.");
+                break;
+            default:
+                toret.append(" desconocido.");
+                break;
+        }
+        toret.append("\n");
+        if (!htc.isEmpty()) {
+            toret.append("\n").append(graphycByTime());
+        }
+        return toret.toString();
+    } 
 }
