@@ -61,9 +61,7 @@ public class LuciferSLettuce {
         
     }
     
-    private static void pause(long l){
-        System.out.println("Min left "+1+" eliminar esta instruccion en main pause()");
-        long minLeft=0;
+    private static void pause(long minLeft){
         while (minLeft>0 ) {
             try{
                 System.out.println("Tiempo restante "+ minLeft+" min.");

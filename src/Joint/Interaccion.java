@@ -243,7 +243,7 @@ public class Interaccion extends Object{
     }
     
     private int getLevel(float mayor, float actual){
-        return (int)(actual*mayor/10);
+        return (int)((actual*10)/mayor);
     }
     
     /**
@@ -259,10 +259,8 @@ public class Interaccion extends Object{
         }else toret=0;
         for (int i = 0; i < htc.size(); i++) {
             provisional=htc.get(i).getTiempoTotal();
-            if (toret<provisional) {
-                toret=provisional;
-            }
-            switch (i) {
+            
+            switch (n) {
                 case 0:
                     toret=toret>provisional?provisional:toret;
                     break;
@@ -285,13 +283,6 @@ public class Interaccion extends Object{
     }
     
     
-    private int getHighHtcLevel(){// los niveles van de 1 a 10
-        int mayor=0;
-        for (int i = 0; i < htc.size(); i++) {
-            if (htc.get(i).getLevel()>mayor)  mayor= htc.get(i).getLevel();
-        }
-        return mayor;
-    }
     
     public Element toDom(){
         Element raiz= new Element(INTERACTION);

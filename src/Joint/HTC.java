@@ -24,7 +24,6 @@ public class HTC {
     
     private int hora;
     private int minuto;
-    private int level;
     private float[] tiempos;
     private int [] errores;
 
@@ -41,7 +40,6 @@ public class HTC {
         Element eltoErrores = e.getFirstChildElement( MISTAKES );
         Element eltoTimes = e.getFirstChildElement( TIMES );
         
-        System.out.println("e "+e.getLocalName());
         if ( eltoHora == null ) {
             hora=0;
             System.out.println(toRed("error con la hora en HTC."));
@@ -94,19 +92,6 @@ public class HTC {
     public void setMinuto(int minuto) {
         this.minuto = minuto;
     }
-
-    /**
-     * @deprecated 
-     * @return 
-     */
-    public int getLevel() {
-        
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
     
     public void setTiempos(float[] t){
         tiempos=t;
@@ -157,9 +142,6 @@ public class HTC {
                             penalizacion=0;
                     }
                 }else penalizacion=0;
-                if (penalizacion>100) {
-                    System.out.println(toRed("mas de 100 de penalizacion, deja la lechuga tío. en la prueba ")+" "+toRed(Integer.toString(j)));
-                }
                 torret+=auxiliar + ((auxiliar*penalizacion)/100);
             }
          return torret;
@@ -197,16 +179,4 @@ public class HTC {
         return raiz;
     }
     
-    public String toStringHora(){
-        StringBuilder toret= new StringBuilder();
-        
-        toret.append(hora).append(":").append(minuto);
-        return toret.toString();
-    }
-    
-    public String toStringLevel(){
-        StringBuilder toret= new StringBuilder();
-        toret.append(level);
-        return toret.toString();
-    }
 }
