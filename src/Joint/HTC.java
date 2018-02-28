@@ -41,15 +41,15 @@ public class HTC {
         Element eltoErrores = e.getFirstChildElement( MISTAKES );
         Element eltoTimes = e.getFirstChildElement( TIMES );
         
-        
+        System.out.println("e "+e.getLocalName());
         if ( eltoHora == null ) {
             hora=0;
-            System.out.println(toRed("error con la hora."));
+            System.out.println(toRed("error con la hora en HTC."));
         }else hora=Integer.parseInt(eltoHora.getValue());
         
         if ( eltoMinuto == null ) {
             minuto=0;
-            System.out.println(toRed( "Falta minuto" ));
+            System.out.println(toRed( "Falta minuto en HTC" ));
         }else minuto=Integer.parseInt(eltoMinuto.getValue());
         
         errores=new int[INTERACTION_TIMES];

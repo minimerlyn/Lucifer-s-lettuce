@@ -54,19 +54,23 @@ public class Interaccion extends Object{
             System.out.println(toRed("Error en el tipo del filtro."));
         }else this.tipoFiltro = Integer.parseInt(elem.getFirstChildElement(FILTER).getValue());
         
-        htc = new ArrayList<>();
-        if (elem.getFirstChildElement(HTCs) == null) {
-            System.out.println(toRed("htc esta vacio o hay un error"));
-        }else{
-            Elements htcs = elem.getChildElements(HTC);
-            if (htcs.size()!=0) 
-                for (int i = 0; i < htcs.size(); i++) 
-                    htc.add(new HTC(htcs.get(i)));
-        }
         if (elem.getFirstChildElement(DATE) == null) {
             date= new Date(0,0,0,0);
             System.out.println(toRed("Error en el date."));
         }else date= new Date(elem.getFirstChildElement(DATE));
+        
+        Element eltoHTCs = elem.getFirstChildElement(HTCs);
+        
+        htc = new ArrayList<>();
+        if (eltoHTCs == null) {
+            System.out.println(toRed("htcs esta vacio o hay un error"));
+        }else{
+            Elements htcs = eltoHTCs.getChildElements(HTC);
+            if (htcs.size()!=0) 
+                for (int i = 0; i < htcs.size(); i++) 
+                    htc.add(new HTC(htcs.get(i)));
+        }
+        
     }
     
     public float getPeso(){
