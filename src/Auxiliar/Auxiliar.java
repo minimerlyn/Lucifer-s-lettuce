@@ -100,8 +100,25 @@ public class Auxiliar {
     public static int parseInt(String st){ 
         int toret;
         try{
+            
             toret=Integer.parseInt(st);
             
+        }catch(NumberFormatException exc){
+            System.out.println(toRed("Numero introducido no es valido."));
+            try{
+                toret=(int) Float.parseFloat(st);
+                System.out.println(toBlue("Convertido a numero valido."));
+            }catch(NumberFormatException excep){
+                System.out.println(toRed("Caracter introducido no es valido."));
+                toret=-1;
+            }
+        }
+        return toret;
+    }
+    public static float parseFloat(String st){ 
+        float toret;
+        try{
+            toret=Float.parseFloat(st);
         }catch(NumberFormatException exc){
             System.out.println(toRed("Numero introducido no es valido."));
             toret=-1;
