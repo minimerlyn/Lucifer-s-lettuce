@@ -423,13 +423,16 @@ public class History {
                 if (valores[i]<=1 && valores[i-1]<=1 ) {
                     toret.append("_");
                 }else toret.append("|");
-                toret.append("______");
+                
             }else{
                 if (valores[i]<=1) {
                 toret.append("_");
                 }else toret.append("|");
-                toret.append("______");
+                
             }
+            if (valores[i]==-1) {
+                toret.append("xxxxxx");
+            }else toret.append("______");
         }
         if (i>0 && valores[i-1]>=1) {
             toret.append("|");
@@ -467,16 +470,17 @@ public class History {
         float mayor=0;
         float menor=Integer.MAX_VALUE;
         for (int i = 0; i < actual.length; i++) {
+            System.out.println(i+": "+actual[i]);
             if (mayor<actual[i]) {
                 mayor=actual[i];
             }else if (menor>actual[i]) menor=actual[i];
+            
         }
         mayor-=menor;
         int [] toret= new int[actual.length];
         for (int i = 0; i < actual.length; i++) {
-            toret[i]= (int) (((actual[i]-menor)*10)/mayor);
+            toret[i]= actual[i]!=0 ? (int) (((actual[i]-menor)*10)/mayor):-1;
         }
-        System.out.println("mayor "+mayor+ "menor "+ menor);
         return toret;
         
     }
@@ -509,7 +513,16 @@ public class History {
         1|____|______|______|______|______|______|______|_____________|______|______|
             12:23  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33
         */
-        System.out.println("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        float[] tiemposMedios= new float[inter.size()];
+        int [] dias= new int[inter.size()];
+        int [] meses= new int[inter.size()];
+        for (int i = 0; i < inter.size(); i++) {
+            tiemposMedios[i] = inter.get(i).getMedioTiempo();
+            dias[i]=inter.get(i).getDate().getDay();
+            meses[i]=inter.get(i).getDate().getMonth();
+        }
+        System.out.println(graphycByTime(getLevels(tiemposMedios)) +
+                        getTimeToGraphyc(dias,meses,'/'));
         
     }
     

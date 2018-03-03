@@ -107,8 +107,11 @@ public class Interaccion extends Object{
     }
     
     public float [] getTiemposTotales(){
-        float [] toret= new float[htc.size()];
-        
+        float [] toret= htc.size()<=0 ? new float[1]:new float[htc.size()];
+        if (htc.size()<=0) {
+            toret[0]=0;
+            return toret;
+        }
         for (int i=0; i<htc.size(); i++) {
             toret[i]= htc.get(i).getTiempoTotal();
         }
@@ -165,6 +168,9 @@ public class Interaccion extends Object{
     }
     
     public  float getMedioTiempo(){
+        if (htc.size()<=0) {
+            return 0;
+        }
         float toret=0;
         for (int i = 0; i < htc.size(); i++) {
             toret=htc.get(i).getTiempoTotal();
