@@ -106,113 +106,35 @@ public class Interaccion extends Object{
         htc.add(i);
     }
     
-    
-    
-    public String graphycByTime() {// hacer funcionar con tiempos
-        /*
+    public float [] getTiemposTotales(){
+        float [] toret= new float[htc.size()];
         
-         6|                  ________
-         5|           _______|      |                                  _______
-         4|    _______|      |      |_______                           |      |
-         3|    |      |      |      |      |                           |      |
-         2|    |      |      |      |      |______________             |      |_______
-         1|____|______|______|______|______|______|______|_____________|______|______|
-                12:23  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33
-        12345671234567 
-              0      1      2
-        14
-        */
-        
-        /*
-            los caracteres posibles a partir de la intro son:
-            1: "      "
-            2: "______"
-            3: 
-        */
-        float mayor=getTiempo(1);
-        float menor=getTiempo(0);
-        StringBuilder toret = new StringBuilder();
-        int i;
-        for (int j = 10; j > 1; j--) {//for (int j = getHighHtcLevel(); j > 1; j--) {
-            if (j<10) toret.append(' ');
-            toret.append(j).append("|");//ya vamos en el caracter numero 2
-            for (i = 0; i < htc.size(); i++) {
-                if (i==0) {//intro
-                    toret.append("    ");
-                }
-                // no es intro
-                    if (getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor)==j) {//editado
-                        if (i>0 && getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)
-                                >getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor)) {
-                            toret.append("|______");
-                        }else toret.append("_______");
-                        if((i+1)<htc.size()){// tiene siguiente
-                            
-                        }
-                    }else if (getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor)>j){
-                        toret.append("|");
-                        if((i+1)<htc.size()){// tiene siguiente
-                             toret.append("      ");
-                        }
-                    }else if (i>0 && getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)>
-                            getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor) && 
-                            getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)> j) {
-                            toret.append("|");
-                            toret.append("      ");
-                    }else {
-                        if(i>0 && getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)==j){
-                                toret.append("_      ");
-                        }else toret.append("       ");
-                    }
-            }
-            if (getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)==j) {
-                toret.append("_");
-            }else if (getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)>j){
-                toret.append("      |");
-            }
-            toret.append("\n");
+        for (int i=0; i<htc.size(); i++) {
+            toret[i]= htc.get(i).getTiempoTotal();
         }
-        toret.append(" 1").append("|____");
-        for ( i = 0; i < htc.size(); i++) {
-            if (i>0) {
-                if (getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor)<=1 &&
-                        getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)<=1 ) {
-                    toret.append("_");
-                }else toret.append("|");
-                toret.append("______");
-            }else{
-                if (getLevel(mayor-menor,htc.get(i).getTiempoTotal()-menor)<=1) {
-                toret.append("_");
-                }else toret.append("|");
-                toret.append("______");
-            }
-        }
-        if (getLevel(mayor-menor,htc.get(i-1).getTiempoTotal()-menor)>=1) {
-            toret.append("|");
-        }else toret.append("_");
-        /*
-         1|____|______|______|______|______|______|______|_____________|______|______|
-                12:23  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33
-        12345671234567 
-        */
-        toret.append("\n        ");
-        for (i = 0; i < htc.size(); i++) {
-            if (htc.get(i).getHora()<10) {
-                toret.append(" ");
-            }
-            toret.append(htc.get(i).getHora()).append(":");
-            toret.append(htc.get(i).getMinuto()).append("  ");
-            if (htc.get(i).getMinuto()<10) {
-                toret.append(" ");
-            }
-        }
-        
-        return toret.toString();
+        return toret;
     }
     
-    private int getLevel(float mayor, float actual){
-        return (int)((actual*10)/mayor);
+    public int [] getHoras(){
+        int [] toret= new int[htc.size()];
+        
+        for (int i=0; i<htc.size(); i++) {
+            toret[i]= htc.get(i).getHora();
+        }
+        return toret;
     }
+    
+    public int [] getMinutos(){
+        int [] toret= new int[htc.size()];
+        
+        for (int i=0; i<htc.size(); i++) {
+            toret[i]= htc.get(i).getMinuto();
+        }
+        return toret;
+    }
+    
+    
+    
     
     /**
      * 
@@ -302,9 +224,6 @@ public class Interaccion extends Object{
                 break;
         }
         toret.append("\n");
-        if (!htc.isEmpty()) {
-            toret.append("\n").append(graphycByTime());
-        }
         return toret.toString();
     } 
 }

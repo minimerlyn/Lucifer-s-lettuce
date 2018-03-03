@@ -27,7 +27,7 @@ public class LuciferSLettuce {
     public static void mainlc(){
         History history = new History();
         int op=0;
-        System.out.println("Bienvenido a Lucifer's lettuce");
+        System.out.println(toBlue("Bienvenido a Lucifer's lettuce"));
         while (op!= MAX_OPTIONS) {
             System.out.println("------------------------------");
             System.out.println("Que desea hacer:");

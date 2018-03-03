@@ -337,14 +337,15 @@ public class History {
         clear();
         if (inter.size()>0) {
             System.out.println(this.toString());
-            boolean cont=true;
             int op;
             do{
                 op=leerNum("Introduce un numero para ver mas detalles o 0 para volver.- ");
-                if (op>inter.size() || op<=0) {
+                if (op>inter.size() || op<0) {
                     System.out.println("Numero no valido.");
-                }else if(op<inter.size() || op>0){
-                    System.out.println(inter.get(op-1).toString());
+                }else if(op!=0){
+                    System.out.println(inter.get(op-1).toString() + 
+                            graphycByTime(getLevels(inter.get(op-1).getTiemposTotales())) +
+                            getTimeToGraphyc(inter.get(op-1).getHoras(),inter.get(op-1).getMinutos(),':'));
                 }
             }while(op!=0);
         }else   System.out.println("No hay ninguna interaccion.");
@@ -353,6 +354,131 @@ public class History {
         //2-dia y has fumado tanta maria
         
         //introduce un numero para ver mas detalles o 0 para volver
+    }
+    
+    public String graphycByTime(int[] valores) {// hacer funcionar con tiempos
+        /*
+        
+         6|                  ________
+         5|           _______|      |                                  _______
+         4|    _______|      |      |_______                           |      |
+         3|    |      |      |      |      |                           |      |
+         2|    |      |      |      |      |______________             |      |_______
+         1|____|______|______|______|______|______|______|_____________|______|______|
+                12:23  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33
+        12345671234567 
+              0      1      2
+        14
+        */
+        
+        /*
+            los caracteres posibles a partir de la intro son:
+            1: "      "
+            2: "______"
+            3: 
+        */
+        
+        StringBuilder toret = new StringBuilder();
+        toret.append("\n");
+        int i;
+        for (int j = 10; j > 1; j--) {//for (int j = getHighHtcLevel(); j > 1; j--) {
+            if (j<10) toret.append(' ');
+            toret.append(j).append("|");//ya vamos en el caracter numero 2
+            for (i = 0; i < valores.length; i++) {
+                if (i==0) {//intro
+                    toret.append("    ");
+                }
+                // no es intro
+                    if (valores[i]==j) {//editado
+                        if (i>0 && valores[i-1] > valores[i]) {
+                            toret.append("|______");
+                        }else toret.append("_______");
+                        if((i+1)<valores.length){// tiene siguiente
+                            
+                        }
+                    }else if (valores[i]>j){
+                        toret.append("|");
+                        if((i+1)<valores.length){// tiene siguiente
+                             toret.append("      ");
+                        }
+                    }else if (i>0 && valores[i-1]>valores[i] && valores[i-1]> j) {
+                            toret.append("|");
+                            toret.append("      ");
+                    }else {
+                        if(i>0 && valores[i-1]==j){
+                                toret.append("_      ");
+                        }else toret.append("       ");
+                    }
+            }
+            if (i>0 && valores[i-1]==j) {
+                toret.append("_");
+            }else if (i>0 && valores[i-1]>j){
+                toret.append("      |");
+            }
+            toret.append("\n");
+        }
+        toret.append(" 1").append("|____");
+        for ( i = 0; i < valores.length; i++) {
+            if (i>0) {
+                if (valores[i]<=1 && valores[i-1]<=1 ) {
+                    toret.append("_");
+                }else toret.append("|");
+                toret.append("______");
+            }else{
+                if (valores[i]<=1) {
+                toret.append("_");
+                }else toret.append("|");
+                toret.append("______");
+            }
+        }
+        if (i>0 && valores[i-1]>=1) {
+            toret.append("|");
+        }else toret.append("_");
+        
+        return toret.toString();
+    }
+    
+    private String getTimeToGraphyc(int [] n1, int [] n2, char c){
+        /*
+         1|____|______|______|______|______|______|______|_____________|______|______|
+                12:23  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33  12:33
+        12345671234567 
+        */
+        StringBuilder toret = new StringBuilder();
+        toret.append("\n        ");
+        if (n1.length==n2.length) {
+            int i;
+            for (i = 0; i < n1.length; i++) {
+                if (n1[i]<10) {
+                    toret.append(" ");
+                }
+                toret.append(n1[i]).append(c);
+                toret.append(n2[i]).append("  ");
+                if (n2[i]<10) {
+                    toret.append(" ");
+                }
+            }
+        }else toret.append(toRed("ERROR CON N1.LENGTH Y N2.LENGTH EN getTimeToGraphyc"));
+        
+        return toret.toString();
+    }
+    
+    private int [] getLevels(float [] actual){
+        float mayor=0;
+        float menor=Integer.MAX_VALUE;
+        for (int i = 0; i < actual.length; i++) {
+            if (mayor<actual[i]) {
+                mayor=actual[i];
+            }else if (menor>actual[i]) menor=actual[i];
+        }
+        mayor-=menor;
+        int [] toret= new int[actual.length];
+        for (int i = 0; i < actual.length; i++) {
+            toret[i]= (int) (((actual[i]-menor)*10)/mayor);
+        }
+        System.out.println("mayor "+mayor+ "menor "+ menor);
+        return toret;
+        
     }
     
     /**
