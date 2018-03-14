@@ -142,8 +142,19 @@ public class History {
                 mes=getMomento(momento,3);
             }
         }while(dia==-1 || mes == -1);
-                
-        return new Interaccion(peso,pesoTotal,tipoFiltro,new Date(dia,mes,hora,min));
+        
+        Calendar cal= Calendar.getInstance();
+        int year=cal.get(Calendar.YEAR);
+        
+        if ( cal.get(Calendar.MONTH) == mes) {
+            if (cal.get(Calendar.DATE)==dia) {
+                if (cal.get(Calendar.HOUR_OF_DAY)==hora) {
+                    if(cal.get(Calendar.MINUTE) < min) year--;     
+                }else if(cal.get(Calendar.HOUR_OF_DAY) < hora) year--;     
+            }else if(cal.get(Calendar.DATE) < dia) year--;     
+        }else   if(cal.get(Calendar.MONTH) < mes) year--;         
+        
+        return new Interaccion(peso,pesoTotal,tipoFiltro,new Date(year,mes,dia,hora,min));
     }
     
     /**
@@ -290,48 +301,68 @@ public class History {
         }
         return (float) toret;
     }
+    public Interaccion getLastInter(){
+        return inter.get(0);
+    }
     
-    private int getDifTiempo(Calendar c1){//HORRIBLE POR FAVOR EDITAR
+    /**
+     * 
+     * @param c1 la fecha mas antigua
+     * @return la diferencia de fechas
+     */
+    public  int getDifTiempo(Calendar c1){
         Calendar c2= Calendar.getInstance();
-        int res;
-        int t1=0;
-        int t2=0;
-        if (c1.get(Calendar.HOUR_OF_DAY)!=c2.get(Calendar.HOUR_OF_DAY)) {
-            t1+=c1.get(Calendar.HOUR_OF_DAY)*3600;
-            t2+=c2.get(Calendar.HOUR_OF_DAY)*3600;
-        }
-        if (c1.get(Calendar.MINUTE)!=c2.get(Calendar.MINUTE)) {
-            t1+=c1.get(Calendar.MINUTE)*60;
-            t2+=c2.get(Calendar.MINUTE)*60;
-        }
-        if (c1.get(Calendar.SECOND)!=c2.get(Calendar.SECOND)) {
-            t1+=c1.get(Calendar.SECOND);
-            t2+=c2.get(Calendar.SECOND);
-        }
-        //t1 y t2 estan en segundos
-        t1*=1000;
-        t2*=1000;
-        //t1 y t2 estan en milisegundos
-        if (c1.get(Calendar.MILLISECOND)!=c2.get(Calendar.MILLISECOND)) {
-            t1+=c1.get(Calendar.MILLISECOND);
-            t2+=c2.get(Calendar.MILLISECOND);
+        int t,res=0;
+        if (c1.get(Calendar.YEAR)!=c2.get(Calendar.YEAR)) {//el año solo avanza no hay warap arround
+            t=c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);
+            t*=961848000;
+            res+=t;            
         }
         
-        return t2-t1;
+        
+        if (c1.get(Calendar.MONTH)!=c2.get(Calendar.MONTH)) {//a partir de aqui hay wraparround
+            t=c2.get(Calendar.MONTH)>c1.get(Calendar.MONTH)?c2.get(Calendar.MONTH)-c1.get(Calendar.MONTH):
+                    (c2.get(Calendar.MONTH)+12)-c1.get(Calendar.MONTH);
+            t*=2635200;
+            res+=t;
+        }
+        
+        if (c1.get(Calendar.DATE)!=c2.get(Calendar.DATE)) {
+            t=c2.get(Calendar.DATE)>c1.get(Calendar.DATE)?c2.get(Calendar.DATE)-c1.get(Calendar.DATE):
+                    c1.get(Calendar.DATE)-c2.get(Calendar.DATE);
+            t*=86400;
+            res+=t;
+        }
+        if (c1.get(Calendar.HOUR_OF_DAY)!=c2.get(Calendar.HOUR_OF_DAY)) {
+            t=c2.get(Calendar.HOUR_OF_DAY)>c1.get(Calendar.HOUR_OF_DAY)?c2.get(Calendar.HOUR_OF_DAY)-c1.get(Calendar.HOUR_OF_DAY):
+                    (c2.get(Calendar.HOUR_OF_DAY)+24)-c1.get(Calendar.HOUR_OF_DAY);
+            t*=3600;
+            res+=t;
+        }
+        if (c1.get(Calendar.MINUTE)!=c2.get(Calendar.MINUTE)) {
+            
+            t=c2.get(Calendar.MINUTE)>c1.get(Calendar.MINUTE)?c2.get(Calendar.MINUTE)-c1.get(Calendar.MINUTE):
+                    (c2.get(Calendar.MINUTE)+60)-c2.get(Calendar.MINUTE);
+            
+            t*=60;
+            res+=t;
+        }
+        if (c1.get(Calendar.SECOND)!=c2.get(Calendar.SECOND)) {
+            t=c2.get(Calendar.SECOND)>c1.get(Calendar.SECOND)?c2.get(Calendar.SECOND)-c1.get(Calendar.SECOND):
+                    (c2.get(Calendar.SECOND)+60)-c2.get(Calendar.SECOND);
+            res+=t;
+        }
+        //res estan en segundos
+        res*=1000;
+        //res estan en milisegundos
+        if (c1.get(Calendar.MILLISECOND)!=c2.get(Calendar.MILLISECOND)) {
+            t=c2.get(Calendar.MILLISECOND)>c1.get(Calendar.MILLISECOND)?c2.get(Calendar.MILLISECOND)-c1.get(Calendar.MILLISECOND):
+                   (c2.get(Calendar.SECOND)+1000)-c2.get(Calendar.SECOND);
+            
+            res+=t;
+        }
+        return res>=0?res:-res;
     }
-    
-    /*
-    private void pause(int i){
-        do {
-            try{
-                Thread.sleep(1000);
-            }catch(InterruptedException exc){
-                System.out.println(toRed("Error en el metodo History.pause"));
-            }
-            i--;
-        } while (i>0);
-    }
-    */
     
     public void histoyOp() {
         clear();
@@ -501,7 +532,7 @@ public class History {
     /**
      *  @decrypted
      */
-    public void QuantityGraphycByTime() {
+    public void HighnessGraphycByTime() {
         clear();
         /*
         
@@ -531,9 +562,7 @@ public class History {
         //esperar confirmacion del usuario
         //si es la primera int no importa el tiempo de espera
         //si el tiempo desde la ultima interaccion es mayor que 10 ( la maquina ya ha esperado 10 min antes) hace una media entre la ultima int y esta
-        Calendar c0=Calendar.getInstance();
-        waitTillEnter();
-        double t1=getDifTiempo(c0);
+        
         System.out.println("Cometer "+toRed("errores")+ " supone una penalizacion de tiempo.");
         int i,j,k;
         k=0;
@@ -541,8 +570,12 @@ public class History {
         int [] errores=new int[INTERACTION_TIMES];
         
         boolean correcto;
-        System.out.println("Pulsa enter para empeza la prueba de "+toBlue("suma")+":");
+        System.out.println("Empezando la prueba de "+toBlue("suma")+":");
         waitTillEnter();
+        
+        Calendar c0=Calendar.getInstance();
+        double t1=getDifTiempo(c0);
+        
         errores[0]=0;
         Calendar c1=Calendar.getInstance();
         while (k<INTERACTION_ARITHMETIC_TRYS) {
@@ -555,7 +588,7 @@ public class History {
         tiempos[0]=getDifTiempo(c1);
         
         k=0;
-        System.out.println("Pulsa enter para empeza la prueba de "+toBlue("multiplicacion")+":");
+        System.out.println("Empezando la prueba de "+toBlue("multiplicacion")+":");
         waitTillEnter();
         errores[1]=0;
         c1=Calendar.getInstance();
@@ -569,7 +602,7 @@ public class History {
         tiempos[1]=getDifTiempo(c1);
         
         k=j=0;
-        System.out.println("Pulsa enter para empeza la prueba de "+toBlue("escritura")+":");
+        System.out.println("Empezando la prueba de "+toBlue("escritura")+":");
         waitTillEnter();
         errores[2]=0;
         ArrayList<Integer> cad = new ArrayList<>();
@@ -623,7 +656,7 @@ public class History {
         c1=Calendar.getInstance();
         HTC actual= new HTC(c1.get(Calendar.HOUR_OF_DAY),c1.get(Calendar.MINUTE),tiempos,errores);
         if (inter.get(0).getHtc().size()>0) {//true- hay mas de un obj en thc
-            if (t1>600000) {//hacer aqui un while (mientras las diff de tiempo sean mayores que 20 min
+            if (t1>600000) {
                 inter.get(0).addHtcInteracion(getHTCIntermedios(actual));
             }
         }

@@ -6,6 +6,7 @@
 package Joint;
 
 import static Auxiliar.Auxiliar.toRed;
+import java.util.Calendar;
 import nu.xom.Element;
 
 /**
@@ -14,33 +15,43 @@ import nu.xom.Element;
  */
 public class Date {
     private static final String DATE="DATE";
-    private static final String DAY="DAY";
+    private static final String YEAR="YEAR";
     private static final String MONTH="MONTH";
+    private static final String DAY="DAY";
     private static final String HOURE="HOURE";
     private static final String MINUTE="MINUTE";
     
-    private int day;
+    private int year;
     private int month;
+    private int day;
     private int houre;
     private int min;
     
-    public Date(int d, int m, int h, int min){
-        day= d;
+    public Date(int y, int m, int d, int h, int min){
+        
+        year=y;
         month = m;
+        day= d;
         houre =h;
         this.min = min;
     }
     
     public Date(Element elem){
-        if (elem.getFirstChildElement(DAY) == null) {
-            System.out.println(toRed("Hay un error con el dia."));
-            day=0;
-        }else day = Integer.parseInt(elem.getFirstChildElement(DAY).getValue());
+        if(elem.getFirstChildElement(YEAR) == null){
+            System.out.println(toRed("Hay un error con el año."));
+            year= Calendar.getInstance().get(Calendar.YEAR);
+        }else year = Integer.parseInt(elem.getFirstChildElement(YEAR).getValue());
         
         if (elem.getFirstChildElement(MONTH) == null) {
             System.out.println(toRed("Hay un error con el mes."));
             month=0;
         }else month = Integer.parseInt(elem.getFirstChildElement(MONTH).getValue());
+        
+        if (elem.getFirstChildElement(DAY) == null) {
+            System.out.println(toRed("Hay un error con el dia."));
+            day=0;
+        }else day = Integer.parseInt(elem.getFirstChildElement(DAY).getValue());
+        
         
         if (elem.getFirstChildElement(HOURE) == null) {
             System.out.println(toRed("Hay un error con la hora."));
@@ -56,20 +67,27 @@ public class Date {
     
     
 
-    public int getDay() {
-        return day;
+    public int getYear(){
+        return year;
     }
-
-    public void setDay(int day) {
-        this.day = day;
+    
+    public void setYear(int y){
+        year=y;
     }
-
     public int getMonth() {
         return month;
     }
 
     public void setMonth(int month) {
         this.month = month;
+    }
+    
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
     }
 
     public int getHoure() {
@@ -93,46 +111,47 @@ public class Date {
      * @param d fecha a comparar
      * @return devuelve true si la fecha enviada es posterior a la fecha que llama al metodo
      */
-    public boolean masReciente(Date d){
-        if (d.month == month) {
-            if (d.day==day) {
-                if (d.houre==houre) {
-                    return min>d.min;
-                }else return houre>d.houre;
-            }else return day>d.day;
-        }else return month>d.month;
-    }
     
-    public String toStringDay(){
-        StringBuilder toret = new StringBuilder();
-        toret.append("Dia-> ").append(day).append("/").append(month);
-        return toret.toString();
+    public boolean masReciente(Date d){
+        if(d.year == year){
+            if (d.month == month) {
+                if (d.day==day) {
+                    if (d.houre==houre) {
+                        return min>d.min;
+                    }else return houre>d.houre;
+                }else return day>d.day;
+            }else return month>d.month;
+        }else return year>d.year;
     }
     
     @Override
     public String toString(){
         StringBuilder toret = new StringBuilder();
-        toret.append("Dia.- ").append(day).append("/").append(month);
-        toret.append("\nHora.- ").append(houre).append(":").append(min);
+        toret.append("Dia.- ").append(day).append("/").append(month)
+                .append("/").append(year);
+        toret.append("\tHora.- ").append(houre).append(":").append(min);
+        toret.append("\n");
         return toret.toString();
-        
     }
     
     public Element toDom(){
         Element raiz = new Element(DATE);
         
-        Element eltoDay = new Element(DAY);
+        Element eltoYear = new Element(YEAR);
         Element eltoMonth = new Element(MONTH);
+        Element eltoDay = new Element(DAY);
         Element eltoHoure = new Element(HOURE);
         Element eltoMinute = new Element(MINUTE);
         
-        eltoDay.appendChild(Integer.toString(day));
+        eltoYear.appendChild(Integer.toString(year));
         eltoMonth.appendChild(Integer.toString(month));
+        eltoDay.appendChild(Integer.toString(day));
         eltoHoure.appendChild(Integer.toString(houre));
         eltoMinute.appendChild(Integer.toString(min));
         
-        raiz.appendChild(eltoDay);
+        raiz.appendChild(eltoYear);
         raiz.appendChild(eltoMonth);
+        raiz.appendChild(eltoDay);
         raiz.appendChild(eltoHoure);
         raiz.appendChild(eltoMinute);
         

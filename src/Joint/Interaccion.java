@@ -55,7 +55,7 @@ public class Interaccion extends Object{
         }else this.tipoFiltro = Integer.parseInt(elem.getFirstChildElement(FILTER).getValue());
         
         if (elem.getFirstChildElement(DATE) == null) {
-            date= new Date(0,0,0,0);
+            date= new Date(-1,-1,-1,-1,-1);
             System.out.println(toRed("Error en el date."));
         }else date= new Date(elem.getFirstChildElement(DATE));
         
@@ -88,13 +88,17 @@ public class Interaccion extends Object{
     public void setHtc(ArrayList<HTC> htc) {
         this.htc = htc;
     }
+    
+    public HTC getLastHTC(){
+        return htc.get(htc.size()-1);
+    }
 
     public Date getDate() {
         return date;
     }
     
     public String getDay(){
-        return date.toStringDay();
+        return date.toString();
     }
     
 

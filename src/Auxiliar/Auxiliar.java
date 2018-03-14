@@ -145,7 +145,7 @@ public class Auxiliar {
     }
     
     public static void waitTillEnter( ) {
-        System.out.println("Presiona enter para continuar.");
+        System.out.println("Presiona "+toBlue("enter")+" para continuar.");
         try{
             while( ( System.in.read() ) != '\n' );
         }catch( IOException exc){
