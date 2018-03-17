@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Scanner;
 
 /**
  *
@@ -53,7 +54,10 @@ public class LuciferSLettuce {//900008
                     break;
                 case 3: history.addInteraction();
                     break;
-                case 4: continuarIter(history);
+                case 4: //continuarIter(history);
+                        //pause(1);
+                        history.contInteracion();
+                        
                     break;
                 case 5: history.calibracion();
                     break;
@@ -130,17 +134,25 @@ public class LuciferSLettuce {//900008
         Thread cadena = new Thread( new Runnable(){
             @Override
             public void run(){
+                Scanner scan = new Scanner (System.in);
                 boolean continuar=true;
                 String cad="a";
                 while (continuar) {
-                    if (ratilla[0]==1) {
+                    try{
+                        Thread.sleep(1);
+                        if (ratilla[0]==1) {
+                            continuar=false;
+
+                        }else cad= scan.nextLine();
+                        if (cad.equalsIgnoreCase("detener")) {
+                            continuar=false;
+                            ratilla[1]=1;
+                            espera.interrupt();
+                    
+                        }
+                    }catch(InterruptedException exc){
                         continuar=false;
-                        
-                    }else cad= leerCad();
-                    if (cad.equalsIgnoreCase("detener")) {
-                        continuar=false;
-                        ratilla[1]=1;
-                        espera.interrupt();
+                        System.out.println("interrumpido");
                     }
                 }
             }
@@ -155,7 +167,7 @@ public class LuciferSLettuce {//900008
                 System.out.println(toRed("hilo prinicipal interrumpido"));
             }
         }
-        System.out.println(toBlue("Introduce cualquier cosa y dale al enter."));
+        System.out.println(toBlue("Dale al enter para liberar el teclado."));
         //el proceso cadena tiene el teclado y hay que presionar enter para liberarlo
         return ratilla[1]==1;
         

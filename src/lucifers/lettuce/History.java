@@ -96,7 +96,6 @@ public class History {
         while (i<inter.size() && !nueva.getDate().masReciente(inter.get(i).getDate())) {
             i++;
         }
-        System.out.println("se añade en la posicion "+i);
         inter.add(i, nueva);
     }
     
@@ -504,13 +503,19 @@ public class History {
             System.out.println(i+": "+actual[i]);
             if (mayor<actual[i]) {
                 mayor=actual[i];
-            }else if (menor>actual[i]) menor=actual[i];
+            }
+                if (menor>actual[i]) 
+                    menor=actual[i];
+            
             
         }
-        mayor-=menor;
+        mayor=mayor-menor;
         int [] toret= new int[actual.length];
         for (int i = 0; i < actual.length; i++) {
+            System.out.println("actual[i] "+ actual[i]+ "menor "+ menor);
             toret[i]= actual[i]!=0 ? (int) (((actual[i]-menor)*10)/mayor):-1;
+            System.out.println("'"+i+"': actual[i]-menor*10 "+(actual[i]-menor));
+            System.out.println(" nivel -> "+ toret[i]);
         }
         return toret;
         
@@ -633,8 +638,14 @@ public class History {
                         if (letra<maximo-1) {//puedo mirar si falta una letra
                             
                             if (posiblesCadenas[i].toLowerCase().charAt(letra)==
-                                    answer.charAt((letra2+1))) {//ERRROOOORRRR
+                                    answer.charAt(letra2)) {
+                                letra=indice;
+                                
+                            }else if (posiblesCadenas[i].toLowerCase().charAt(letra+1)==
+                                    answer.charAt((letra2))) {
+                                letra2=indice;
                                 letra2++;
+                                indice++;
                             }
                         }
                     }
@@ -646,6 +657,8 @@ public class History {
                 if (answer.length()!=posiblesCadenas[i].length()) {//añade la diferencia de long de cadenas
                     errores[2]+=answer.length()<posiblesCadenas[i].length()?
                             posiblesCadenas[i].length()-answer.length():answer.length()-posiblesCadenas[i].length();
+                    System.out.println("errores "+ (answer.length()<posiblesCadenas[i].length()?
+                            posiblesCadenas[i].length()-answer.length():answer.length()-posiblesCadenas[i].length()));
                 }
             }
             
@@ -665,7 +678,6 @@ public class History {
     
     private HTC getHTCIntermedios(HTC nueva){
         HTC anterior=inter.get(0).getHtc().get(inter.get(0).getHtc().size()-1);
-        
         int aux=nueva.getHora();
         if (aux==0) aux=24;
         int hora=(anterior.getHora()+aux)/2;
