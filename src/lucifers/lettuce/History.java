@@ -511,8 +511,8 @@ public class History {
         }
         mayor=mayor-menor;
         int [] toret= new int[actual.length];
-        for (int i = 0; i < actual.length; i++) {
-            System.out.println("actual[i] "+ actual[i]+ "menor "+ menor);
+        for (int i = 0; i < actual.length; i++) {//el ultimo 45,5627 seg
+            System.out.println("actual[i] "+ toMin(actual[i])+ "menor "+ menor);
             toret[i]= actual[i]!=0 ? (int) (((actual[i]-menor)*10)/mayor):-1;
             System.out.println("'"+i+"': actual[i]-menor*10 "+(actual[i]-menor));
             System.out.println(" nivel -> "+ toret[i]);
@@ -520,6 +520,14 @@ public class History {
         return toret;
         
     }
+   private String toMin(float n){
+       StringBuilder toret = new StringBuilder();
+       int min=(int) (n/0.001);
+       System.out.println("min1 = "+min);
+       float min2= (float)(n/0.001);
+       System.out.println("min2 = "+min2);
+       return Float.toString(n);
+   }
     
     /**
      * 
