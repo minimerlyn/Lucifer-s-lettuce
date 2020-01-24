@@ -497,9 +497,9 @@ public class History {
     }
     
     private int [] getLevels(float [] actual){
-        float mayor=0;
-        float menor=Integer.MAX_VALUE;
-        for (int i = 0; i < actual.length; i++) {
+        float mayor=actual[0];
+        float menor=actual[0];
+        for (int i = 1; i < actual.length; i++) {
             System.out.println(i+": "+actual[i]);
             if (mayor<actual[i]) {
                 mayor=actual[i];
@@ -520,6 +520,8 @@ public class History {
         return toret;
         
     }
+    
+    
    private String toMin(float n){
        StringBuilder toret = new StringBuilder();
        int min=(int) (n/0.001);
